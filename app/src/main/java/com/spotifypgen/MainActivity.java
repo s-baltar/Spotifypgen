@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Playlist> playlists = new ArrayList<>();
     private Playlist playlist;
 
+    private Button searchBtn;
+    private EditText searchCriteria;
+    public String searchString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,21 +50,31 @@ public class MainActivity extends AppCompatActivity {
         userView = (TextView) findViewById(R.id.user);
         songView = (TextView) findViewById(R.id.song);
         playlistView = (TextView) findViewById(R.id.playlist);
-        addBtn = (Button) findViewById(R.id.add);
+//        addBtn = (Button) findViewById(R.id.add);
         addToPlaylistBtn = (Button) findViewById(R.id.addToPlaylist);
         nextSongBtn = (Button) findViewById(R.id.nextSong);
+
+        searchCriteria = (EditText) findViewById(R.id.search);
+        searchBtn = (Button) findViewById(R.id.searchButton);
+        searchString = searchCriteria.getText().toString();
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         userView.setText(sharedPreferences.getString("userid", "No User"));
 
-        getTracks();
         createPlaylist();
         getPlaylists();
 
-        addBtn.setOnClickListener(addListener);
+//        addBtn.setOnClickListener(addListener);
         addToPlaylistBtn.setOnClickListener(addToPlaylistListener);
         nextSongBtn.setOnClickListener(nextSongListener);
+        searchBtn.setOnClickListener(searchBtnListener);
     }
+
+
+    private View.OnClickListener searchBtnListener = v -> {
+        searchString = searchCriteria.getText().toString();
+        dispSearch();
+    };
 
     private View.OnClickListener addListener = v -> {
         songService.addSongToLibrary(this.song);
@@ -121,4 +137,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void dispSearch() {
+        songService.songSearch(() -> {
+            tracks = songService.getSongs();
+            updateSong();
+        }, searchString);
+    }
 }

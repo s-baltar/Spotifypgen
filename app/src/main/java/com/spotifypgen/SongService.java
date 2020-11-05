@@ -14,6 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +27,7 @@ public class SongService {
     private RequestQueue queue;
     private User user;
     private ArrayList<Playlist> playlists = new ArrayList<>();
+    private Song song;
 
     public SongService(Context context) {
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
@@ -34,9 +37,6 @@ public class SongService {
     public ArrayList<Song> getSongs() {
         return songs;
     }
-//    public ArrayList<Playlist> getPlaylists() {
-//        return playlists;
-//    }
 
     public ArrayList<Song> getRecentlyPlayedTracks(final VolleyCallBack callBack) {
         String endpoint = "https://api.spotify.com/v1/me/player/recently-played";
@@ -139,72 +139,41 @@ public class SongService {
         return ids;
     }
 
-    // I thought it would be better if me moved this method and all other playlist methods to a PlaylistService class
 
-//    public void createPlaylist(String user_id) {
-//        String endpoint = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
-//
-//        JSONObject payload = preparePostPayload();
-//
-//        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
-//                Request.Method.POST, endpoint, payload, response -> {
-//        }, error -> {
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> headers = new HashMap<>();
-//                String token = sharedPreferences.getString("token", "");
-//                String auth = "Bearer " + token;
-//                headers.put("Authorization", auth);
-//                headers.put("Content-Type", "application/json");
-//                return headers;
-//            }
-//        };
-//        queue.add(jsonObjectRequest);
-//    }
+    public ArrayList<Song> songSearch(final VolleyCallBack callBack,String searchCriteria) {
+        String endpoint = "https://api.spotify.com/v1/search?q="+searchCriteria+"&type=track&market=US";
 
-//    private JSONObject preparePostPayload() {
-//        JSONObject params = new JSONObject();
-//        try {
-//            params.put("name", "Generated Playlist");
-//            params.put("public", true);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return params;
-//    }
-
-    // test commit
-    public ArrayList<Playlist> getUserPlaylists(final VolleyCallBack callBack) {
-        String endpoint = "https://api.spotify.com/v1/me/playlists";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, endpoint, null, response -> {
-                    Gson gson = new Gson();
-                    JSONArray jsonArray = response.optJSONArray("items");
-                    for (int n = 0; n < jsonArray.length(); n++) {
-                        try {
-                            JSONObject object = jsonArray.getJSONObject(n);
-                            Playlist playlist = gson.fromJson(object.toString(), Playlist.class);
-                            playlists.add(playlist);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
+                Request.Method.GET, endpoint, null, response -> {
+            Gson gson = new Gson();
+            JSONObject object = response.optJSONObject("tracks");
+            JSONArray jsonArray = object.optJSONArray("items");
+                for (int n = 0; n < jsonArray.length(); n++) {
+                    try {
+                        JSONObject obj = jsonArray.getJSONObject(n);
+                        song = gson.fromJson(obj.toString(), Song.class);
+                        songs.add(song);
                     }
-                    callBack.onSuccess();
-                }, error -> {
-                }) {
+                    catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                callBack.onSuccess();
+        }, error -> {
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
                 headers.put("Authorization", auth);
+                headers.put("Content-Type", "application/json");
+                headers.put("Accept", "application/json");
                 return headers;
             }
         };
         queue.add(jsonObjectRequest);
-        return playlists;
+        return songs;
     }
 
 }
