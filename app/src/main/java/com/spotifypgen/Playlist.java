@@ -1,10 +1,10 @@
 package com.spotifypgen;
 
-public class Song {
+public class Playlist {
     private String id;
     private String name;
 
-    public Song(String id, String  name) {
+    public void playlist(String id, String  name) {
         this.name = name;
         this.id = id;
     }
