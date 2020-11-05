@@ -24,7 +24,12 @@ public class SplashActivity extends AppCompatActivity {
     private static final String CLIENT_ID = "7142c8a1f8104de6a1840519208ca1da";
     private static final String REDIRECT_URI = "com.spotifypgen://callback";
     private static final int REQUEST_CODE = 1337;
-    private static final String SCOPES = "user-read-recently-played,user-library-modify,user-read-email,user-read-private,user-library-read";
+    private static final String SCOPES = "user-read-recently-played," +
+                                         "user-library-modify," +
+                                         "user-read-email," +
+                                         "user-read-private," +
+                                         "user-library-read," +
+                                         "playlist-modify-public";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

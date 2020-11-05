@@ -2,7 +2,6 @@ package com.spotifypgen;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,6 +23,7 @@ public class SongService {
     private ArrayList<Song> songs = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
+    private User user;
 
     public SongService(Context context) {
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
@@ -68,7 +68,6 @@ public class SongService {
     }
 
     public ArrayList<Song> getSavedTracks(final VolleyCallBack callBack) {
-        Log.d("SB:", "Start getSavedTracks");
         String endpoint = "https://api.spotify.com/v1/me/tracks";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -134,5 +133,38 @@ public class SongService {
             e.printStackTrace();
         }
         return ids;
+    }
+
+    public void createPlaylist(String user_id) {
+        String endpoint = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
+
+        JSONObject payload = preparePostPayload();
+
+        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
+                Request.Method.POST, endpoint, payload, response -> {
+        }, error -> {
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
+    private JSONObject preparePostPayload() {
+        JSONObject params = new JSONObject();
+        try {
+            params.put("name", "Generated Playlist");
+            params.put("public", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return params;
     }
 }
