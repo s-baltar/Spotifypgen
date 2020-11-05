@@ -68,4 +68,8 @@ public class MainActivity extends AppCompatActivity {
             song = tracks.get(0);
         }
     }
+
+    private void createPlaylist() {
+        songService.createPlaylist(userView.getText().toString());
+    }
 }
