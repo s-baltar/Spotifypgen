@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private Song song;
 
     private SongService songService;
-    private ArrayList<Song> recentlyPlayedTracks;
+    private ArrayList<Song> tracks; // Recently played tracks or user's saved tracks
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,25 +42,30 @@ public class MainActivity extends AppCompatActivity {
 
     private View.OnClickListener addListener = v -> {
         songService.addSongToLibrary(this.song);
-        if (recentlyPlayedTracks.size() > 0) {
-            recentlyPlayedTracks.remove(0);
+        if (tracks.size() > 0) {
+            tracks.remove(0);
         }
         updateSong();
     };
 
     private void getTracks() {
         songService.getRecentlyPlayedTracks(() -> {
-            recentlyPlayedTracks = songService.getSongs();
+            tracks = songService.getSongs();
+            updateSong();
+        });
+    }
+
+    private void getSavedTracks() {
+        songService.getSavedTracks(() -> {
+            tracks = songService.getSongs();
             updateSong();
         });
     }
 
     private void updateSong() {
-        if (recentlyPlayedTracks.size() > 0) {
-            songView.setText(recentlyPlayedTracks.get(0).getName());
-            song = recentlyPlayedTracks.get(0);
+        if (tracks.size() > 0) {
+            songView.setText(tracks.get(0).getName());
+            song = tracks.get(0);
         }
-
     }
-
 }
