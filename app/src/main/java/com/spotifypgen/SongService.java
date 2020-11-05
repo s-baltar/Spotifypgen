@@ -34,9 +34,9 @@ public class SongService {
     public ArrayList<Song> getSongs() {
         return songs;
     }
-    public ArrayList<Playlist> getPlaylists() {
-        return playlists;
-    }
+//    public ArrayList<Playlist> getPlaylists() {
+//        return playlists;
+//    }
 
     public ArrayList<Song> getRecentlyPlayedTracks(final VolleyCallBack callBack) {
         String endpoint = "https://api.spotify.com/v1/me/player/recently-played";
@@ -139,38 +139,41 @@ public class SongService {
         return ids;
     }
 
-    public void createPlaylist(String user_id) {
-        String endpoint = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
+    // I thought it would be better if me moved this method and all other playlist methods to a PlaylistService class
 
-        JSONObject payload = preparePostPayload();
+//    public void createPlaylist(String user_id) {
+//        String endpoint = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
+//
+//        JSONObject payload = preparePostPayload();
+//
+//        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
+//                Request.Method.POST, endpoint, payload, response -> {
+//        }, error -> {
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", "");
+//                String auth = "Bearer " + token;
+//                headers.put("Authorization", auth);
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
+//        queue.add(jsonObjectRequest);
+//    }
 
-        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
-                Request.Method.POST, endpoint, payload, response -> {
-        }, error -> {
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", "");
-                String auth = "Bearer " + token;
-                headers.put("Authorization", auth);
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
-        queue.add(jsonObjectRequest);
-    }
+//    private JSONObject preparePostPayload() {
+//        JSONObject params = new JSONObject();
+//        try {
+//            params.put("name", "Generated Playlist");
+//            params.put("public", true);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return params;
+//    }
 
-    private JSONObject preparePostPayload() {
-        JSONObject params = new JSONObject();
-        try {
-            params.put("name", "Generated Playlist");
-            params.put("public", true);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return params;
-    }
     // test commit
     public ArrayList<Playlist> getUserPlaylists(final VolleyCallBack callBack) {
         String endpoint = "https://api.spotify.com/v1/me/playlists";

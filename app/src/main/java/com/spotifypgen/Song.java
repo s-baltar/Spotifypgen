@@ -2,6 +2,7 @@ package com.spotifypgen;
 
 public class Song {
     private String id;
+    private String uri;
     private String name;
 
     public Song(String id, String  name) {
@@ -19,6 +20,10 @@ public class Song {
 
     public String getName() {
         return name;
+    }
+
+    public String getURI() {
+        return this.uri;
     }
 
     public void setName(String name) {

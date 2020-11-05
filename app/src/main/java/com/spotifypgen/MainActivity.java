@@ -18,7 +18,13 @@ public class MainActivity extends AppCompatActivity {
     private TextView songView;
     private TextView playlistView;
     private Button addBtn;
+    private Button nextSongBtn;
     private Song song;
+
+    // << ---- addToPlayList Code //
+    private Button addToPlaylistBtn;
+    private PlaylistService playlistService;
+    // << ---- addToPlayList Code //
 
     private SongService songService;
     private ArrayList<Song> tracks; // Recently played tracks or user's saved tracks
@@ -30,20 +36,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // << ---- addToPlayList Code //
+        playlistService = new PlaylistService(getApplicationContext());
+        // << ---- addToPlayList Code //
+
         songService = new SongService(getApplicationContext());
         userView = (TextView) findViewById(R.id.user);
         songView = (TextView) findViewById(R.id.song);
         playlistView = (TextView) findViewById(R.id.playlist);
         addBtn = (Button) findViewById(R.id.add);
+        addToPlaylistBtn = (Button) findViewById(R.id.addToPlaylist);
+        nextSongBtn = (Button) findViewById(R.id.nextSong);
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         userView.setText(sharedPreferences.getString("userid", "No User"));
 
         getTracks();
-        getPlaylists();
         createPlaylist();
+        getPlaylists();
 
         addBtn.setOnClickListener(addListener);
+        addToPlaylistBtn.setOnClickListener(addToPlaylistListener);
+        nextSongBtn.setOnClickListener(nextSongListener);
     }
 
     private View.OnClickListener addListener = v -> {
@@ -53,6 +67,20 @@ public class MainActivity extends AppCompatActivity {
         }
         updateSong();
     };
+
+    private View.OnClickListener nextSongListener = v -> {
+        if (tracks.size() > 0) {
+            tracks.remove(0);
+        }
+        updateSong();
+    };
+
+    // << ---- addToPlayList Code //
+
+    private View.OnClickListener addToPlaylistListener = v -> {
+        playlistService.addSongToPlaylist(this.song, this.playlist);
+    };
+    // << ---- addToPlayList Code //
 
     private void getTracks() {
         songService.getRecentlyPlayedTracks(() -> {
@@ -76,12 +104,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createPlaylist() {
-        songService.createPlaylist(userView.getText().toString());
+        playlistService.createPlaylist(userView.getText().toString());
     }
 
     private void getPlaylists() {
-        songService.getUserPlaylists(() -> {
-            playlists = songService.getPlaylists();
+        playlistService.getUserPlaylists(() -> {
+            playlists = playlistService.getPlaylists();
             updatePlaylist();
         });
     }
