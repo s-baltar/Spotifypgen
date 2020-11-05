@@ -16,11 +16,14 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView userView;
     private TextView songView;
+    private TextView playlistView;
     private Button addBtn;
     private Song song;
 
     private SongService songService;
     private ArrayList<Song> tracks; // Recently played tracks or user's saved tracks
+    private ArrayList<Playlist> playlists = new ArrayList<>();
+    private Playlist playlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +33,15 @@ public class MainActivity extends AppCompatActivity {
         songService = new SongService(getApplicationContext());
         userView = (TextView) findViewById(R.id.user);
         songView = (TextView) findViewById(R.id.song);
+        playlistView = (TextView) findViewById(R.id.playlist);
         addBtn = (Button) findViewById(R.id.add);
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         userView.setText(sharedPreferences.getString("userid", "No User"));
 
         getTracks();
+        getPlaylists();
+        createPlaylist();
 
         addBtn.setOnClickListener(addListener);
     }
@@ -72,4 +78,19 @@ public class MainActivity extends AppCompatActivity {
     private void createPlaylist() {
         songService.createPlaylist(userView.getText().toString());
     }
+
+    private void getPlaylists() {
+        songService.getUserPlaylists(() -> {
+            playlists = songService.getPlaylists();
+            updatePlaylist();
+        });
+    }
+
+    private void updatePlaylist() {
+        if (playlists.size() > 0) {
+            playlistView.setText(playlists.get(0).getName());
+            this.playlist = playlists.get(0);
+        }
+    }
+
 }

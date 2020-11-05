@@ -29,7 +29,9 @@ public class SplashActivity extends AppCompatActivity {
                                          "user-read-email," +
                                          "user-read-private," +
                                          "user-library-read," +
-                                         "playlist-modify-public";
+                                         "playlist-modify-public," +
+                                         "playlist-read-collaborative," +
+                                         "playlist-read-private";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
