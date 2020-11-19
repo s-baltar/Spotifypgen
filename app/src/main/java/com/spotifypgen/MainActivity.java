@@ -96,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
             tracks.remove(0);
         }
         updateSong();
+        if (artists.size() > 0) {
+            artists.remove(0);
+        }
+        updateArtist();
     };
 
     // << ---- addToPlayList Code //

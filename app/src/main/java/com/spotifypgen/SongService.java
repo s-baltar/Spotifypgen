@@ -115,7 +115,7 @@ public class SongService {
         queue.add(jsonObjectRequest);
     }
 
-    //
+
     private JsonObjectRequest prepareSongLibraryRequest(JSONObject payload) {
         return new JsonObjectRequest(Request.Method.PUT, "https://api.spotify.com/v1/me/tracks", payload, response -> {
         }, error -> {
@@ -220,13 +220,20 @@ public class SongService {
         return artists;
     }
 
-    // get list of songs from user input and their top 5 artists
+    // get list of songs based on user input plus their top 5 artists
     public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Artist> topArtists) {
-        String[] splitArtistString = topArtists.get(0).getURI().split("artist:");
-        String artistURI = splitArtistString[1];
+        String[] artistURI = new String[5];
+        for (int i = 0; i < 5; i++) {
+            String[] splitArtistString = topArtists.get(i).getURI().split("artist:");
+            artistURI[i] = splitArtistString[1];
+        }
         String endpoint = "https://api.spotify.com/v1/recommendations?" +
-                            "seed_artists=" + artistURI +
-                            "&min_energy=0.4&" +
+                            "seed_artists=" + artistURI[0] + "," +
+                            artistURI[1] + "," +
+                            artistURI[2] + "," +
+                            artistURI[3] + "," +
+                            artistURI[4] +
+                            "&min_energy=0.4&" + // need to change to take in user input
                             "min_popularity=50";
 
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
@@ -252,8 +259,6 @@ public class SongService {
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
                 headers.put("Authorization", auth);
-                headers.put("Content-Type", "application/json");
-                headers.put("Accept", "application/json");
                 return headers;
             }
         };
