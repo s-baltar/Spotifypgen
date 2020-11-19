@@ -34,6 +34,8 @@ public class PlaylistService {
         return playlists;
     }
 
+
+    // return uri of song to add to playlist
     private JSONObject preparePutPayload(Song song) {
         JSONArray uriarray = new JSONArray();
         uriarray.put(song.getURI());
@@ -46,6 +48,8 @@ public class PlaylistService {
         return uris;
     }
 
+
+    // create empty playlist
     public void createPlaylist(String user_id) {
         String endpoint = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
 
@@ -68,6 +72,8 @@ public class PlaylistService {
         queue.add(jsonObjectRequest);
     }
 
+
+    // prepare payload for creating empty playlist
     private JSONObject preparePostPayload() {
         JSONObject params = new JSONObject();
         try {
@@ -80,7 +86,8 @@ public class PlaylistService {
         return params;
     }
 
-    // test commit
+
+    // returns array of user's saved playlists
     public ArrayList<Playlist> getUserPlaylists(final VolleyCallBack callBack) {
         String endpoint = "https://api.spotify.com/v1/me/playlists";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -114,14 +121,14 @@ public class PlaylistService {
     }
 
 
-    // <---- add song to displayed playlist ----> //
-
+    // add song to displayed playlist
     public void addSongToPlaylist(Song song, Playlist playlist) {
         JSONObject payload = preparePutPayload(song);
         JsonObjectRequest jsonObjectRequest = preparePlaylistRequest(payload, playlist.getId());
         queue.add(jsonObjectRequest);
     }
 
+    // add song to displayed playlist
     private JsonObjectRequest preparePlaylistRequest(JSONObject payload, String playlist_id) {
         return new JsonObjectRequest(Request.Method.POST, "https://api.spotify.com/v1/playlists/" + playlist_id +"/tracks", payload, response -> {
         }, error -> {

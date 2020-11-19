@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView userView;
     private TextView songView;
     private TextView playlistView;
+    private TextView artistView;
     private Button addBtn;
     private Button nextSongBtn;
     private Song song;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Song> tracks; // Recently played tracks or user's saved tracks
     private ArrayList<Playlist> playlists = new ArrayList<>();
     private Playlist playlist;
+
+    private ArrayList<Artist> artists = new ArrayList<>();
+    private Artist artist;
 
     private Button searchBtn;
     private EditText searchCriteria;
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         userView = (TextView) findViewById(R.id.user);
         songView = (TextView) findViewById(R.id.song);
         playlistView = (TextView) findViewById(R.id.playlist);
+        artistView = (TextView) findViewById(R.id.artist);
+
 //        addBtn = (Button) findViewById(R.id.add);
         addToPlaylistBtn = (Button) findViewById(R.id.addToPlaylist);
         nextSongBtn = (Button) findViewById(R.id.nextSong);
@@ -63,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         createPlaylist();
         getPlaylists();
+        getArtists();
 
 //        addBtn.setOnClickListener(addListener);
         addToPlaylistBtn.setOnClickListener(addToPlaylistListener);
@@ -138,9 +145,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void dispSearch() {
-        songService.songSearch(() -> {
+        songService.songSeedSearch(() -> {
             tracks = songService.getSongs();
             updateSong();
-        }, searchString);
+        }, artists);
+    }
+
+    private void getArtists() {
+        songService.getTopArtists(() -> {
+            artists = songService.getArtists();
+            updateArtist();
+        });
+    }
+    private void updateArtist() {
+        if (artists.size() > 0) {
+            artistView.setText(artists.get(0).getName());
+            this.artist = artists.get(0);
+        }
     }
 }

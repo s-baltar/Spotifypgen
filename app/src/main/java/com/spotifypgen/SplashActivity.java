@@ -29,6 +29,7 @@ public class SplashActivity extends AppCompatActivity {
                                          "user-read-email," +
                                          "user-read-private," +
                                          "user-library-read," +
+                                         "user-top-read," +
                                          "playlist-modify-public," +
                                          "playlist-read-collaborative," +
                                          "playlist-read-private";
