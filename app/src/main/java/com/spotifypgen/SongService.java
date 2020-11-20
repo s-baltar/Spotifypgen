@@ -2,6 +2,7 @@ package com.spotifypgen;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -266,4 +267,61 @@ public class SongService {
         return songs;
     }
 
+    public HashMap<String, Double> getTrackFeatures(final VolleyCallBack callBack, String songID) {
+        Log.d("SB", "getTrackFeatures");
+        HashMap<String, Double> features = new HashMap<String, Double>();
+
+        String endpoint = "https://api.spotify.com/v1/audio-features/" + songID;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, endpoint, null, response -> {
+            Gson gson = new Gson();
+
+            Log.d("SB: ", "Getting obj");
+            double duration = response.optDouble("duration_ms");
+            double acousticness = response.optDouble("acousticness");
+            double danceability = response.optDouble("danceability");
+
+
+            features.put("duration_ms", duration);
+            features.put("acousticness", acousticness);
+            features.put("danceability", danceability);
+
+            callBack.onSuccess();
+        }, error -> {
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+        return features;
+    }
+
+    public ArrayList<Song> getAudioFeatures(final VolleyCallBack callBack, ArrayList<Song> songs) {
+        Log.d("SB", "getAudioFeatures");
+        HashMap<String, Double> features;
+
+//        Log.d("SB", "F0");
+
+        if (songs.isEmpty())
+            Log.d("SB", "EMPTY");
+
+        for (int i = 0; i < songs.size(); i++) {
+            Log.d("SB", "F1");
+            features = getTrackFeatures(()->{ // Get audio features.
+            }, songs.get(i).getId());
+
+            songs.get(i).setDuration( features.get("duration_ms") );
+            songs.get(i).setAcousticness( features.get("acousticness") );
+            songs.get(i).setDanceability( features.get("danceability") );
+        }
+
+        return songs;
+    }
 }

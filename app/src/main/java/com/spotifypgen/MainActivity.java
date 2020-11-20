@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     // << ---- addToPlayList Code //
 
     private SongService songService;
-    private ArrayList<Song> tracks; // Recently played tracks or user's saved tracks
+    private ArrayList<Song> tracks;         // Recently played tracks or user's saved tracks
     private ArrayList<Playlist> playlists = new ArrayList<>();
     private Playlist playlist;
 
@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         createPlaylist();
         getPlaylists();
         getArtists();
+        // SB: TEST
+        getSavedTracks();
+//        getAudioFeatures();
 
 //        addBtn.setOnClickListener(addListener);
         addToPlaylistBtn.setOnClickListener(addToPlaylistListener);
@@ -121,6 +124,16 @@ public class MainActivity extends AppCompatActivity {
             tracks = songService.getSongs();
             updateSong();
         });
+        getAudioFeatures();
+    }
+
+    private void getAudioFeatures() {
+        Log.d("SB", "Getting audio features");
+        songService.getAudioFeatures(()->{
+            tracks = songService.getSongs();
+            updateSong();
+        }, tracks);
+        Log.d("SB", String.valueOf( tracks.get(0).getDuration() ) );
     }
 
     private void updateSong() {
@@ -167,4 +180,5 @@ public class MainActivity extends AppCompatActivity {
             this.artist = artists.get(0);
         }
     }
+
 }
