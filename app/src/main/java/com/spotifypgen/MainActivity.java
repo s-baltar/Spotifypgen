@@ -2,20 +2,15 @@ package com.spotifypgen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
-
+/*
     private TextView userView;
     private TextView songView;
     private TextView playlistView;
@@ -41,9 +36,33 @@ public class MainActivity extends AppCompatActivity {
     private EditText searchCriteria;
     public String searchString;
 
+ */
+    private TextView userView;
+    private Button genPlaylistBtn;
+    private Button songSearchBtn;
+    private Button createEmptyPlaylistBtn;
+    private Button logoutBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mainscreen);
+
+        userView = (TextView) findViewById(R.id.user);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+        userView.setText(sharedPreferences.getString("userid", "No User"));
+
+        genPlaylistBtn = (Button) findViewById(R.id.genPlaylist_button);
+        songSearchBtn = (Button) findViewById(R.id.songSearch_button);
+        createEmptyPlaylistBtn = (Button) findViewById(R.id.CreateEmptyPlaylist_button);
+        logoutBtn = (Button) findViewById(R.id.logout_button);
+
+        genPlaylistBtn.setOnClickListener(genPlaylistBtnListener);
+        songSearchBtn.setOnClickListener(songSearchBtnListener);
+        createEmptyPlaylistBtn.setOnClickListener(createEmptyPlaylistBtnListener);
+        logoutBtn.setOnClickListener(logoutBtnListener);
+
+        /*
         setContentView(R.layout.activity_main);
 
         // << ---- addToPlayList Code //
@@ -56,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
         playlistView = (TextView) findViewById(R.id.playlist);
         artistView = (TextView) findViewById(R.id.artist);
 
-//        addBtn = (Button) findViewById(R.id.add);
         addToPlaylistBtn = (Button) findViewById(R.id.addToPlaylist);
         nextSongBtn = (Button) findViewById(R.id.nextSong);
 
@@ -71,13 +89,30 @@ public class MainActivity extends AppCompatActivity {
         getPlaylists();
         getArtists();
 
-//        addBtn.setOnClickListener(addListener);
         addToPlaylistBtn.setOnClickListener(addToPlaylistListener);
         nextSongBtn.setOnClickListener(nextSongListener);
         searchBtn.setOnClickListener(searchBtnListener);
+        */
+
     }
 
+    private View.OnClickListener genPlaylistBtnListener = v -> {
+        Intent newintent = new Intent(MainActivity.this, GenPlaylistActivity.class);
+        startActivity(newintent);
+    };
+    private View.OnClickListener songSearchBtnListener = v -> {
+        Intent newintent = new Intent(MainActivity.this, SongSearchActivity.class);
+        startActivity(newintent);
+    };
+    private View.OnClickListener createEmptyPlaylistBtnListener = v -> {
+        Intent newintent = new Intent(MainActivity.this, EmptyPlaylistActivity.class);
+        startActivity(newintent);
+    };
+    private View.OnClickListener logoutBtnListener = v -> {
 
+    };
+
+/*
     private View.OnClickListener searchBtnListener = v -> {
         searchString = searchCriteria.getText().toString();
         dispSearch();
@@ -167,4 +202,5 @@ public class MainActivity extends AppCompatActivity {
             this.artist = artists.get(0);
         }
     }
+    */
 }

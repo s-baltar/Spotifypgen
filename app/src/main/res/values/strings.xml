@@ -3,6 +3,8 @@
     <string name="add_to_playlist">Add To Playlist</string>
     <string name="add">Add</string>
     <string name="next_song">Next song</string>
-    <string name="search">Search</string>
+    <string name="p_nameInput">New playlist name</string>
     <string name="artist">TextView</string>
+    <string name="gen_playlist">Button</string>
+    <string name="search">Search</string>
 </resources>

@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotifypgen">
         <activity android:name=".MainActivity"></activity>
+        <activity android:name=".GenPlaylistActivity"></activity>
+        <activity android:name=".SongSearchActivity"></activity>
+        <activity android:name=".EmptyPlaylistActivity"></activity>
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
