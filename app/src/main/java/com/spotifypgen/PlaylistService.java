@@ -50,10 +50,10 @@ public class PlaylistService {
 
 
     // create empty playlist
-    public void createPlaylist(String user_id) {
+    public void createPlaylist(String user_id, String playlistName) {
         String endpoint = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
 
-        JSONObject payload = preparePostPayload();
+        JSONObject payload = preparePostPayload(playlistName);
 
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.POST, endpoint, payload, response -> {
@@ -74,10 +74,10 @@ public class PlaylistService {
 
 
     // prepare payload for creating empty playlist
-    private JSONObject preparePostPayload() {
+    private JSONObject preparePostPayload(String playlistName) {
         JSONObject params = new JSONObject();
         try {
-            params.put("name", "Generated Playlist");
+            params.put("name", playlistName);
             params.put("public", true);
             params.put("description", "This is your new created playlist!");
         } catch (JSONException e) {

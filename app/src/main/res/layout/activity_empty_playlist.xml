@@ -49,4 +49,33 @@
         android:text="add songs to new playlist"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/createPlaylist_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Create empty playlist"
+        app:layout_constraintEnd_toEndOf="@+id/playlistName_text"
+        app:layout_constraintTop_toBottomOf="@+id/emptyPlaylistName_input" />
+
+    <TextView
+        android:id="@+id/playlistCreated_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        app:layout_constraintEnd_toEndOf="@+id/createPlaylist_button"
+        app:layout_constraintStart_toStartOf="@+id/createPlaylist_button"
+        app:layout_constraintTop_toBottomOf="@+id/createPlaylist_button" />
+
+    <TextView
+        android:id="@+id/emptyPlaylistUser_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="35dp"
+        app:layout_constraintBottom_toTopOf="@+id/playlistName_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
