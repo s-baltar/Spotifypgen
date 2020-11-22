@@ -46,76 +46,87 @@
         app:layout_constraintTop_toBottomOf="@+id/user" />
 
     <TextView
-        android:id="@+id/acousticness"
+        android:id="@+id/acousticness_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="64dp"
         android:text="Acousticness"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playlistNameInput" />
 
     <TextView
-        android:id="@+id/loudness"
+        android:id="@+id/danceability_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="22dp"
-        android:text="Loudness"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instrumentalness" />
-
-    <TextView
-        android:id="@+id/energy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="22dp"
-        android:text="Energy"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/danceability" />
-
-    <TextView
-        android:id="@+id/instrumentalness"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="22dp"
-        android:text="Instrumentalness"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/energy" />
-
-    <TextView
-        android:id="@+id/valence"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="22dp"
-        android:text="Valence (Happiness)"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loudness" />
-
-    <TextView
-        android:id="@+id/danceability"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="20dp"
         android:text="Danceability"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/acousticness" />
+        app:layout_constraintTop_toBottomOf="@+id/acousticness_text" />
+
+    <TextView
+        android:id="@+id/instrumentalness_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="24dp"
+        android:text="Instrumentalness"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/energy_text" />
+
+    <TextView
+        android:id="@+id/valence_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="20dp"
+        android:text="Valence (Happiness)"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loudness_text" />
+
+    <TextView
+        android:id="@+id/length_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="210dp"
+        android:text="Length of playlist"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/valence_text"
+        app:layout_constraintTop_toBottomOf="@+id/filterText" />
+
+    <TextView
+        android:id="@+id/energy_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="24dp"
+        android:text="Energy"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/danceability_text" />
+
+    <TextView
+        android:id="@+id/loudness_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="20dp"
+        android:text="Loudness"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instrumentalness_text" />
 
     <Button
         android:id="@+id/genPlaylist_button"
@@ -125,11 +136,11 @@
         android:layout_marginLeft="31dp"
         android:layout_marginTop="56dp"
         android:text="Generate Playlist"
-        app:layout_constraintStart_toStartOf="@+id/valence"
-        app:layout_constraintTop_toBottomOf="@+id/valence" />
+        app:layout_constraintStart_toStartOf="@+id/valence_text"
+        app:layout_constraintTop_toBottomOf="@+id/valence_text" />
 
     <Button
-        android:id="@+id/backToMain_button"
+        android:id="@+id/genPlaylistMain_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
@@ -141,13 +152,15 @@
 
     <TextView
         android:id="@+id/filterText"
-        android:layout_width="315dp"
-        android:layout_height="0dp"
+        android:layout_width="318dp"
+        android:layout_height="46dp"
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="175dp"
+        android:layout_marginBottom="296dp"
         android:text="Enter playlist preferences on scale from 0.0 to 1.0 (default value is 0.5)"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/length_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

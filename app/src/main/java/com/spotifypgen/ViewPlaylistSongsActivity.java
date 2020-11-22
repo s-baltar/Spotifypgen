@@ -7,18 +7,20 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SongSearchActivity extends AppCompatActivity {
+public class ViewPlaylistSongsActivity extends AppCompatActivity {
     private Button mainBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_song_search);
+        setContentView(R.layout.activity_playlist_songs);
 
-        mainBtn = (Button) findViewById(R.id.songMain_button);
+        mainBtn = (Button) findViewById(R.id.viewPlaylistSongsMain_button);
         mainBtn.setOnClickListener(mainBtnListener);
+
     }
     private View.OnClickListener mainBtnListener = v -> {
-        Intent newintent = new Intent(SongSearchActivity.this, MainActivity.class);
+        Intent newintent = new Intent(ViewPlaylistSongsActivity.this, MainActivity.class);
         startActivity(newintent);
     };
 }

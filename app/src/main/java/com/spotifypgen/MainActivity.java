@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Button songSearchBtn;
     private Button createEmptyPlaylistBtn;
     private Button logoutBtn;
+    private Button dispPlaylistsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +56,13 @@ public class MainActivity extends AppCompatActivity {
         genPlaylistBtn = (Button) findViewById(R.id.genPlaylist_button);
         songSearchBtn = (Button) findViewById(R.id.songSearch_button);
         createEmptyPlaylistBtn = (Button) findViewById(R.id.CreateEmptyPlaylist_button);
+        dispPlaylistsBtn = (Button) findViewById(R.id.dispPlaylists_button);
         logoutBtn = (Button) findViewById(R.id.logout_button);
 
         genPlaylistBtn.setOnClickListener(genPlaylistBtnListener);
         songSearchBtn.setOnClickListener(songSearchBtnListener);
         createEmptyPlaylistBtn.setOnClickListener(createEmptyPlaylistBtnListener);
+        dispPlaylistsBtn.setOnClickListener(dispPlaylistsBtnListener);
         logoutBtn.setOnClickListener(logoutBtnListener);
 
         /*
@@ -106,6 +109,10 @@ public class MainActivity extends AppCompatActivity {
     };
     private View.OnClickListener createEmptyPlaylistBtnListener = v -> {
         Intent newintent = new Intent(MainActivity.this, EmptyPlaylistActivity.class);
+        startActivity(newintent);
+    };
+    private View.OnClickListener dispPlaylistsBtnListener = v -> {
+        Intent newintent = new Intent(MainActivity.this, DispPlaylistsActivity.class);
         startActivity(newintent);
     };
     private View.OnClickListener logoutBtnListener = v -> {
