@@ -26,8 +26,5 @@ public class Song {
         return this.uri;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    public void setName(String name) { this.name = name; }
 }

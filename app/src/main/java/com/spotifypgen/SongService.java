@@ -2,6 +2,7 @@ package com.spotifypgen;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,14 +31,17 @@ public class SongService {
     private ArrayList<Artist> artists = new ArrayList<>();
     private Artist artist;
 
+    private ArrayList<Features> features = new ArrayList<>();
+    private Features feature;
+
     public SongService(Context context) {
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
         queue = Volley.newRequestQueue(context);
     }
 
-    public ArrayList<Song> getSongs() {
-        return songs;
-    }
+    public ArrayList<Song> getSongs() { return songs; }
+
+    public ArrayList<Features> getTrackFeatures() { return features; }
 
     // returns array of user's recently played songs
     public ArrayList<Song> getRecentlyPlayedTracks(final VolleyCallBack callBack) {
@@ -182,7 +186,6 @@ public class SongService {
     }
 
 
-
     public ArrayList<Artist> getArtists() {
         return artists;
     }
@@ -266,4 +269,73 @@ public class SongService {
         return songs;
     }
 
+
+    //  Info: Get song IDs of 100 or less tracks
+    // Param: tracks - ArrayList of Songs.
+    //        offset - Index of Songs to start getting IDs.
+    //   Ret: Comma-separated list of song IDs.
+    private String getIds(ArrayList<Song> tracks, int offset) {
+        String ids = "";
+
+        for (int i=offset; i<tracks.size() && i<100+offset; i++)
+            ids = ids.concat( tracks.get(i).getId() + ",");
+
+        ids = ids.substring( 0, ids.length()-1 ); // Remove "," for last ID.
+
+        return ids;
+    }
+
+
+    //  Info: Request several track features
+    //        Can only query features for 100 songs at a time.
+    // Param: endpoint
+    //   Ret: ArrayList of Features
+    private ArrayList<Features> getFeatures(final VolleyCallBack callBack, String endpoint) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, endpoint, null, response -> {
+                    Gson gson = new Gson();
+                    JSONArray jsonArray = response.optJSONArray("audio_features");
+
+                    for (int i=0; i<jsonArray.length(); i++) {
+                        try {
+                            JSONObject object = jsonArray.getJSONObject(i);
+                            Features feature = gson.fromJson(object.toString(), Features.class);
+                            features.add(feature);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    callBack.onSuccess();
+                }, error -> {
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+        return features;
+    }
+
+
+    //  Info: Get audio features for given songs.
+    // Param: tracks - ArrayList of Songs.
+    //   Ret: ArrayList of Song
+    public ArrayList<Song> getAudioFeatures(final VolleyCallBack callBack, ArrayList<Song> tracks) {
+
+        int offset = 0;
+        while ( offset < tracks.size() ) {
+            String ids = getIds(tracks, offset);
+            String endpoint = "https://api.spotify.com/v1/audio-features/?ids=" + ids;
+            getFeatures(()->{
+            }, endpoint);
+            offset += 100;
+        }
+        callBack.onSuccess(); // SB: ??? When done.
+        return songs;
+    }
 }
