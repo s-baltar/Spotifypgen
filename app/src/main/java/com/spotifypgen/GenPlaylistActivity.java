@@ -51,7 +51,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
 
     private View.OnClickListener genBtnListener = v -> {
-        getSavedTracks();
+        getAllSavedTracks();
     };
 
     // Info: Get user's recently played tracks.
@@ -61,14 +61,24 @@ public class GenPlaylistActivity extends AppCompatActivity {
         });
     }
 
+
     // Info: Get user's 20 most recent saved tracks.
     // TODO: Add arguments to get earlier saved tracks.
     private void getSavedTracks() {
         songService.getSavedTracks(() -> {
             tracks = songService.getSongs();
             getAudioFeatures();
+        }, 0, 20);
+    }
+
+
+    private void getAllSavedTracks() {
+        songService.getAllSavedTracks( () -> {
+            tracks = songService.getSongs();
+            getAudioFeatures();
         });
     }
+
 
     // Info: Get several tracks audio features.
     private void getAudioFeatures() {

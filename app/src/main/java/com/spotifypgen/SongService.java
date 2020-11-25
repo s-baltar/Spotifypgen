@@ -78,8 +78,9 @@ public class SongService {
     }
 
     // returns array of user's saved (liked) songs
-    public ArrayList<Song> getSavedTracks(final VolleyCallBack callBack) {
-        String endpoint = "https://api.spotify.com/v1/me/tracks";
+    public ArrayList<Song> getSavedTracks(final VolleyCallBack callBack, int offset, int limit) {
+        String endpoint = "https://api.spotify.com/v1/me/tracks?offset=" + String.valueOf(offset) +
+                                                               "&limit=" + String.valueOf(limit);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, endpoint, null, response -> {
@@ -109,6 +110,16 @@ public class SongService {
         };
         queue.add(jsonObjectRequest);
 
+        return songs;
+    }
+
+    //  Info: Only gets 1000 most recently saved songs.
+    public ArrayList<Song> getAllSavedTracks(final VolleyCallBack callBack) {
+        for (int i=0; i<1000; i+=20) {
+            getSavedTracks(() -> {
+            }, i, 20);
+        }
+        callBack.onSuccess();
         return songs;
     }
 
@@ -318,6 +329,7 @@ public class SongService {
             }
         };
         queue.add(jsonObjectRequest);
+
         return features;
     }
 
@@ -335,6 +347,7 @@ public class SongService {
             }, endpoint);
             offset += 100;
         }
+
         callBack.onSuccess(); // SB: ??? When done.
         return songs;
     }
