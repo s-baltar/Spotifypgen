@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,23 +14,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="126dp"
+        android:layout_marginLeft="40dp"
         android:text=""
         app:layout_constraintBottom_toTopOf="@+id/filterText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/song"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="288dp"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/playlistNameInput"
@@ -56,6 +47,7 @@
         app:layout_constraintStart_toStartOf="@+id/user"
         app:layout_constraintTop_toBottomOf="@+id/user" />
 
+
     <TextView
         android:id="@+id/acousticness_text"
         android:layout_width="wrap_content"
@@ -67,6 +59,18 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playlistNameInput" />
+
+    <SeekBar
+        android:id="@+id/acoustiness_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:min="0"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintTop_toBottomOf="@id/acousticness_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_creator="@id/acousticness_text"/>
 
     <TextView
         android:id="@+id/danceability_text"
@@ -80,40 +84,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/acousticness_text" />
 
-    <TextView
-        android:id="@+id/instrumentalness_text"
-        android:layout_width="wrap_content"
+    <SeekBar
+        android:id="@+id/danceability_seekbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="24dp"
-        android:text="Instrumentalness"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/energy_text" />
-
-    <TextView
-        android:id="@+id/valence_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="20dp"
-        android:text="Valence (Happiness)"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loudness_text" />
-
-    <TextView
-        android:id="@+id/length_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="210dp"
-        android:text="Length of playlist"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/valence_text"
-        app:layout_constraintTop_toBottomOf="@+id/filterText" />
+        android:min="0"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintTop_toBottomOf="@id/danceability_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_creator="@id/danceability_text"/>
 
     <TextView
         android:id="@+id/energy_text"
@@ -127,6 +108,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/danceability_text" />
 
+    <SeekBar
+        android:id="@+id/energy_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:min="0"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintTop_toBottomOf="@id/energy_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_creator="@id/energy_text"/>
+
+    <TextView
+        android:id="@+id/instrumentalness_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="24dp"
+        android:text="Instrumentalness"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/energy_text" />
+
+    <SeekBar
+        android:id="@+id/instrumentalness_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:min="0"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintTop_toBottomOf="@id/instrumentalness_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_creator="@id/instrumentalness_text"/>
+
     <TextView
         android:id="@+id/loudness_text"
         android:layout_width="wrap_content"
@@ -139,16 +156,74 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instrumentalness_text" />
 
+    <SeekBar
+        android:id="@+id/loudness_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:min="0"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintTop_toBottomOf="@id/loudness_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_creator="@id/loudness_text"/>
+
+    <TextView
+        android:id="@+id/valence_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="20dp"
+        android:text="Valence (Happiness)"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loudness_text" />
+
+    <SeekBar
+        android:id="@+id/valence_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:min="0"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintTop_toBottomOf="@id/valence_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_creator="@id/valence_text"/>
+
+    <TextView
+        android:id="@+id/length_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="210dp"
+        android:text="Length of playlist"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/valence_text"
+        app:layout_constraintTop_toBottomOf="@+id/filterText" />
+
+    <SeekBar
+        android:id="@+id/length_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:min="0"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintTop_toBottomOf="@id/length_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_creator="@id/length_text"/>
+
     <Button
         android:id="@+id/genPlaylist_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="31dp"
-        android:layout_marginLeft="31dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginLeft="100dp"
         android:text="Generate Playlist"
-        app:layout_constraintStart_toStartOf="@+id/valence_text"
-        app:layout_constraintTop_toBottomOf="@+id/valence_text" />
+        app:layout_constraintStart_toStartOf="@+id/length_seekbar"
+        app:layout_constraintTop_toBottomOf="@+id/length_seekbar"
+        />
 
     <Button
         android:id="@+id/genPlaylistMain_button"
@@ -174,6 +249,5 @@
         app:layout_constraintBottom_toTopOf="@+id/length_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

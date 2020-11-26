@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log; // SB: Remove later
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,11 +16,17 @@ import java.util.ArrayList;
 public class GenPlaylistActivity extends AppCompatActivity {
 
     private TextView userView;
-    private TextView songView;
 
     private SongService songService;
-    private Song song;
     private ArrayList<Song> tracks;
+
+    SeekBar acousticness_seekbar;
+    SeekBar danceability_seekbar;
+    SeekBar energy_seekbar;
+    SeekBar instrumentalness_seekbar;
+    SeekBar loudness_seekbar;
+    SeekBar valence_seekbar;
+    SeekBar length_seekbar;
 
     private Button mainBtn;
     private Button genBtn;
@@ -31,17 +38,143 @@ public class GenPlaylistActivity extends AppCompatActivity {
         songService = new SongService(getApplicationContext());
 
         userView = (TextView) findViewById(R.id.user);
-        songView = (TextView) findViewById(R.id.song);
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         userView.setText(sharedPreferences.getString("userid", "No User"));
 
+
+        acousticness_seekbar = (SeekBar) findViewById(R.id.acoustiness_seekbar);
+        acousticness_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        danceability_seekbar = (SeekBar) findViewById(R.id.danceability_seekbar);
+        danceability_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        energy_seekbar = (SeekBar) findViewById(R.id.energy_seekbar);
+        energy_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        instrumentalness_seekbar = (SeekBar) findViewById(R.id.instrumentalness_seekbar);
+        instrumentalness_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        loudness_seekbar = (SeekBar) findViewById(R.id.loudness_seekbar);
+        loudness_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        valence_seekbar = (SeekBar) findViewById(R.id.valence_seekbar);
+        valence_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        length_seekbar = (SeekBar) findViewById(R.id.length_seekbar);
+        length_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         mainBtn = (Button) findViewById(R.id.genPlaylistMain_button);
         mainBtn.setOnClickListener(mainBtnListener);
 
         genBtn = (Button) findViewById(R.id.genPlaylist_button);
         genBtn.setOnClickListener(genBtnListener);
+
     }
 
     private View.OnClickListener mainBtnListener = v -> {
@@ -53,6 +186,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
     private View.OnClickListener genBtnListener = v -> {
         getAllSavedTracks();
     };
+
 
     // Info: Get user's recently played tracks.
     private void getTracks() {
