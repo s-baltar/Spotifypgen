@@ -42,9 +42,9 @@
         android:id="@+id/saveSong_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginBottom="12dp"
         android:text="Save song"
         app:layout_constraintBottom_toTopOf="@+id/addToPlaylist_button"
         app:layout_constraintStart_toStartOf="@+id/addToPlaylist_button" />
@@ -53,9 +53,34 @@
         android:id="@+id/addToPlaylist_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="22dp"
+        android:layout_marginBottom="8dp"
         android:text="add to a playlist"
         app:layout_constraintBottom_toTopOf="@+id/songMain_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="410dp"
+        android:layout_height="509dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <ListView
+            android:id="@+id/songSearchListView"
+            android:layout_width="306dp"
+            android:layout_height="218dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="62dp"
+            android:layout_marginLeft="62dp"
+            android:layout_marginEnd="62dp"
+            android:layout_marginRight="62dp"
+            android:layout_marginBottom="283dp"
+            app:layout_constraintHorizontal_bias="0.533"
+            app:layout_constraintVertical_bias="1.0" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
