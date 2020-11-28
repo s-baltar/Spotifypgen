@@ -23,6 +23,7 @@ public class SongSearchActivity extends AppCompatActivity {
     private ArrayList<Song> tracks = new ArrayList<>();; // Recently played tracks or user's saved tracks
     public ArrayList<String> songTitles;
     private ListView listView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class SongSearchActivity extends AppCompatActivity {
         dispSearch();
         updateSong();
         listView = (ListView) findViewById(R.id.songSearchListView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_song_listview,R.id.label, songTitles);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_song_listview,R.id.songLabel, songTitles);
         listView.setAdapter(adapter);
     };
     private void updateSong() {

@@ -72,6 +72,30 @@ public class PlaylistService {
         queue.add(jsonObjectRequest);
     }
 
+    // deletes a playlist
+    // the spotify API uses the unfollow feature to achieve this
+    public void deletePlaylist(String user_id, Playlist playlist) {
+        String endpoint = "https://api.spotify.com/v1/users/playlists/"+ playlist.getId()+"/followers";
+
+        //JSONObject payload = preparePostPayload(playlistName);
+
+        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
+                Request.Method.POST, endpoint, null, response -> {
+        }, error -> {
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
 
     // prepare payload for creating empty playlist
     private JSONObject preparePostPayload(String playlistName) {

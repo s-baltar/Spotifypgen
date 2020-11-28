@@ -54,7 +54,8 @@ public class EmptyPlaylistActivity extends AppCompatActivity {
     };
     private View.OnClickListener createEmptyPlaylistBtnListener = v -> {
         String playlistNameInput_string = playlistNameInput.getText().toString();
-        if (playlistNameInput_string.isEmpty()) playlistNameInput_string = "Generated Playlist";
+        if (playlistNameInput_string.isEmpty())
+            playlistNameInput_string = "Generated Playlist";
 
         playlistService.createPlaylist(userView.getText().toString(), playlistNameInput_string);
 
