@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,10 +16,11 @@ import java.util.ArrayList;
 public class DispPlaylistsActivity extends AppCompatActivity {
     private Button mainBtn;
     private Button editPlaylistBtn;
-    private ListView playlistView;
+    private ListView playlistLView;
+    //private TextView playlistView;
     private User user;
     private ArrayList<Playlist> playlists = new ArrayList<>();
-    public ArrayList<String> playlistTitles;
+    public ArrayList<String> playlistTitles = new ArrayList<>();
     private PlaylistService playlistService;
 
     @Override
@@ -32,6 +34,8 @@ public class DispPlaylistsActivity extends AppCompatActivity {
 
         editPlaylistBtn = (Button) findViewById(R.id.editPlaylist_button);
         editPlaylistBtn.setOnClickListener(editPlaylistBtnListener);
+
+        //playlistView = (TextView) findViewById(R.id.playlistDisp);
 
         playlistService = new PlaylistService(getApplicationContext());
 
@@ -47,26 +51,25 @@ public class DispPlaylistsActivity extends AppCompatActivity {
         startActivity(newintent);
     };
 
-
-    private void getPlaylists() {
-        playlistService.getUserPlaylists(() -> {
-            this.playlists = playlistService.getPlaylists();
-        });
-    }
+//    private void getPlaylists() {
+//        playlistService.getUserPlaylists(() -> {
+//            playlistArray = playlistService.getPlaylists();
+//        });
+//    }
 
     public void displayPlaylists() {
-        getPlaylists();
-        updatePlaylist();
-        playlistView = (ListView) findViewById(R.id.playlistListView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_playlist_listview,R.id.playlistLabel, playlistTitles);
-        playlistView.setAdapter(adapter);
+        playlistService.getUserPlaylists(() -> {
+            playlists = playlistService.getPlaylists();
+            updatePlaylist();
+            playlistLView = (ListView) findViewById(R.id.playlistListView);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_playlist_listview,R.id.playlistLabel, playlistTitles);
+            playlistLView.setAdapter(adapter);
+        });
     };
 
     private void updatePlaylist() {
-        playlistTitles = new ArrayList<>();
         for (int i = 0; i < playlists.size(); i++) {
             playlistTitles.add(this.playlists.get(i).getName());
-            System.out.println(this.playlists.get(i).getName());
         }
     }
 }
