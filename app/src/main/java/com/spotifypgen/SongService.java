@@ -159,56 +159,6 @@ public class SongService {
         return ids;
     }
 
-    /*
-    seed_artists - 6XpaIBNiVzIetEPCWDvAFP
-    seed_genres - pop
-    seed_tracks - 2tUBqZG2AbRi7Q0BIrVrEj
-     */
-
-    // method to generate a array of songs
-
-    public ArrayList<Song> generateSongs(final VolleyCallBack callBack) {
-        String endpoint =   "https://api.spotify.com/v1/recommendations?market=US&seed_artists=" +
-                            "4NHQUGzhtTLFvgF5SZesLK&seed_tracks=0c6xIDDpzE81m2q797ordA&" +
-                                    "target_acousticness=0.4&" +
-                                    "target_danceability=0.65&" +
-                                    "min_energy=0.65&" +
-                                    "target_energy=0.65&" +
-                                    "max_instrumentalness=0.65&" +
-                                    "target_loudness=0.65&" +
-                                    "min_popularity=50&target_valence=0.65";
-
-        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
-                Request.Method.GET, endpoint, null, response -> {
-            Gson gson = new Gson();
-            JSONArray jsonArray = response.optJSONArray("tracks");
-            for (int n = 0; n < jsonArray.length(); n++) {
-                try {
-                    JSONObject obj = jsonArray.getJSONObject(n);
-                    song = gson.fromJson(obj.toString(), Song.class);
-                    songs.add(song);
-                }
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            callBack.onSuccess();
-        }, error -> {
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", "");
-                String auth = "Bearer " + token;
-                headers.put("Authorization", auth);
-                headers.put("Content-Type", "application/json");
-                headers.put("Accept", "application/json");
-                return headers;
-            }
-        };
-        queue.add(jsonObjectRequest);
-        return songs;
-    }
 
 //  search song by track name
     public ArrayList<Song> songSearch(final VolleyCallBack callBack,String searchCriteria) {
@@ -331,7 +281,7 @@ public class SongService {
 //        return songs;
 //    }
 
-    //songSeedOverload
+
     public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack) {
         String endpoint =   "https://api.spotify.com/v1/recommendations?market=US&seed_artists=" +
                 "4NHQUGzhtTLFvgF5SZesLK&seed_tracks=0c6xIDDpzE81m2q797ordA&" +
@@ -373,18 +323,13 @@ public class SongService {
         return songs;
     }
 
-    //songSeedOverload 2 -- adding parameters
+    //songSeedOverload
+    /*
+        seed_artists - 6XpaIBNiVzIetEPCWDvAFP (Whitney Houston)
+        seed_genres - pop
+        seed_tracks - 2tUBqZG2AbRi7Q0BIrVrEj (I Wanna Dance With Somebody)
+     */
     public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Double> specs) {
-//        String endpoint =   "https://api.spotify.com/v1/recommendations?market=US&seed_artists=" +
-//                "4NHQUGzhtTLFvgF5SZesLK&seed_tracks=0c6xIDDpzE81m2q797ordA&" +
-//                "target_acousticness=0.4&" +
-//                "target_danceability=0.65&" +
-//                "min_energy=0.65&" +
-//                "target_energy=0.65&" +
-//                "max_instrumentalness=0.65&" +
-//                "target_loudness=0.65&" +
-//                "min_popularity=50&target_valence=0.65";
-
         String endpoint =   "https://api.spotify.com/v1/recommendations?market=US&seed_artists=" +
                 "4NHQUGzhtTLFvgF5SZesLK&seed_tracks=0c6xIDDpzE81m2q797ordA&" +
                 "target_acousticness=" + specs.get(0) +
