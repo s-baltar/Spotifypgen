@@ -272,7 +272,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
         specifications(3) = instrumentalness
         specifications(4) = loudness
         specifications(5) = valence
-        specifications(6) = length of playlist
+        specifications(6) = length of playlist**
      */
     private void getSeekbarValues () {
         specifications.add(convert100To1(acousticness_seekbar.getProgress())); //set acousticness
