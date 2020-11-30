@@ -10,7 +10,10 @@ public class Features {
     private double liveness;
     private double valence;
     private double tempo;
+    private double duration_ms;
     private String id;
+
+    private double distance;
 
     public double getDanceability() { return danceability; }
 
@@ -30,7 +33,13 @@ public class Features {
 
     public double getTempo() { return tempo; }
 
+    public double getDuration_ms() { return duration_ms; }
+
     public String getId() {
         return id;
     }
+
+    public double getDistance() { return distance; }
+
+    public void setDistance(double d) { distance = d; }
 }
