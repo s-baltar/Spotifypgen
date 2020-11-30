@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class PlaylistService {
@@ -24,6 +25,7 @@ public class PlaylistService {
     private RequestQueue queue;
     private User user;
     private ArrayList<Playlist> playlists = new ArrayList<>();
+    private Playlist playlist = new Playlist();
 
     public PlaylistService(Context context) {
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
@@ -34,11 +36,12 @@ public class PlaylistService {
         return playlists;
     }
 
+    public Playlist getPlaylist() { return playlist; }
 
     // return uri of song to add to playlist
-    private JSONObject preparePutPayload(Song song) {
+    private JSONObject preparePutPayload(String songURI) {
         JSONArray uriarray = new JSONArray();
-        uriarray.put(song.getURI());
+        uriarray.put(songURI);
         JSONObject uris = new JSONObject();
         try {
            uris.put("uris", uriarray);
@@ -50,13 +53,14 @@ public class PlaylistService {
 
 
     // create empty playlist
-    public void createPlaylist(String user_id, String playlistName) {
+    public Playlist createPlaylist(String user_id, String playlistName) {
         String endpoint = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
-
         JSONObject payload = preparePostPayload(playlistName);
-
+//        playlist = new Playlist();
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.POST, endpoint, payload, response -> {
+                    Gson gson = new Gson();
+                    playlist = gson.fromJson(response.toString(),Playlist.class);
         }, error -> {
         }) {
             @Override
@@ -70,6 +74,7 @@ public class PlaylistService {
             }
         };
         queue.add(jsonObjectRequest);
+        return playlist;
     }
 
     // deletes a playlist
@@ -146,9 +151,9 @@ public class PlaylistService {
 
 
     // add song to displayed playlist
-    public void addSongToPlaylist(Song song, Playlist playlist) {
-        JSONObject payload = preparePutPayload(song);
-        JsonObjectRequest jsonObjectRequest = preparePlaylistRequest(payload, playlist.getId());
+    public void addSongToPlaylist(String songURI, String playlistID) {
+        JSONObject payload = preparePutPayload(songURI);
+        JsonObjectRequest jsonObjectRequest = preparePlaylistRequest(payload, playlistID);
         queue.add(jsonObjectRequest);
     }
 

@@ -282,46 +282,46 @@ public class SongService {
 //    }
 
 
-    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack) {
-        String endpoint =   "https://api.spotify.com/v1/recommendations?market=US&seed_artists=" +
-                "4NHQUGzhtTLFvgF5SZesLK&seed_tracks=0c6xIDDpzE81m2q797ordA&" +
-                "target_acousticness=0.4&" +
-                "target_danceability=0.65&" +
-                "min_energy=0.65&" +
-                "target_energy=0.65&" +
-                "max_instrumentalness=0.65&" +
-                "target_loudness=0.65&" +
-                "min_popularity=50&target_valence=0.65";
-
-        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
-                Request.Method.GET, endpoint, null, response -> {
-            Gson gson = new Gson();
-            JSONArray jsonArray = response.optJSONArray("tracks");
-            for (int n = 0; n < jsonArray.length(); n++) {
-                try {
-                    JSONObject obj = jsonArray.getJSONObject(n);
-                    song = gson.fromJson(obj.toString(), Song.class);
-                    songs.add(song);
-                }
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            callBack.onSuccess();
-        }, error -> {
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", "");
-                String auth = "Bearer " + token;
-                headers.put("Authorization", auth);
-                return headers;
-            }
-        };
-        queue.add(jsonObjectRequest);
-        return songs;
-    }
+//    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack) {
+//        String endpoint =   "https://api.spotify.com/v1/recommendations?market=US&seed_artists=" +
+//                "4NHQUGzhtTLFvgF5SZesLK&seed_tracks=0c6xIDDpzE81m2q797ordA&" +
+//                "target_acousticness=0.4&" +
+//                "target_danceability=0.65&" +
+//                "min_energy=0.65&" +
+//                "target_energy=0.65&" +
+//                "max_instrumentalness=0.65&" +
+//                "target_loudness=0.65&" +
+//                "min_popularity=50&target_valence=0.65";
+//
+//        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
+//                Request.Method.GET, endpoint, null, response -> {
+//            Gson gson = new Gson();
+//            JSONArray jsonArray = response.optJSONArray("tracks");
+//            for (int n = 0; n < jsonArray.length(); n++) {
+//                try {
+//                    JSONObject obj = jsonArray.getJSONObject(n);
+//                    song = gson.fromJson(obj.toString(), Song.class);
+//                    songs.add(song);
+//                }
+//                catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            callBack.onSuccess();
+//        }, error -> {
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", "");
+//                String auth = "Bearer " + token;
+//                headers.put("Authorization", auth);
+//                return headers;
+//            }
+//        };
+//        queue.add(jsonObjectRequest);
+//        return songs;
+//    }
 
     //songSeedOverload
     /*
@@ -329,16 +329,30 @@ public class SongService {
         seed_genres - pop
         seed_tracks - 2tUBqZG2AbRi7Q0BIrVrEj (I Wanna Dance With Somebody)
      */
-    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Double> specs) {
-        String endpoint =   "https://api.spotify.com/v1/recommendations?market=US&seed_artists=" +
-                "4NHQUGzhtTLFvgF5SZesLK&seed_tracks=0c6xIDDpzE81m2q797ordA&" +
-                "target_acousticness=" + specs.get(0) +
-                "&target_danceability=" + specs.get(1) +
-                "&min_energy=" + specs.get(2) +
-                "&target_energy=" + specs.get(3) +
-                "&max_instrumentalness=" + specs.get(4) +
-                "&target_loudness=" + specs.get(5) +
-                "&min_popularity=50&target_valence=0.65";
+//    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Double> specs) {
+    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Artist> topArtists, String criteria) {
+        String[] artistURI = new String[5];
+        for (int i = 0; i < 5; i++) {
+            String[] splitArtistString = topArtists.get(i).getURI().split("artist:");
+            artistURI[i] = splitArtistString[1];
+        }
+        String endpoint = "https://api.spotify.com/v1/recommendations?" +
+                            "seed_artists=" + artistURI[0] + "," +
+                            artistURI[1] + "," +
+                            artistURI[2] + "," +
+                            artistURI[3] + "," +
+                            artistURI[4] + "&" +
+                            criteria;
+//        String endpoint =   "https://api.spotify.com/v1/recommendations?market=US&limit=20&seed_artists=" +
+//                "4NHQUGzhtTLFvgF5SZesLK&seed_tracks=0c6xIDDpzE81m2q797ordA&" +
+//                criteria;
+//                "target_acousticness=" + specs.get(0) +
+//                "&target_danceability=" + specs.get(1) +
+//                "&min_energy=" + specs.get(2) +
+//                "&target_energy=" + specs.get(3) +
+//                "&max_instrumentalness=" + specs.get(4) +
+//                "&target_loudness=" + specs.get(5) +
+//                "&min_popularity=50&target_valence=0.65";
 
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.GET, endpoint, null, response -> {
