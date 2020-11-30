@@ -49,6 +49,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
     SeekBar valence_seekbar;
     EditText length_input;
     int lengthOfPlaylist;
+    boolean newPlaylistCreated = false;
 
     private Button mainBtn;
     private Button genBtn;
@@ -195,45 +196,44 @@ public class GenPlaylistActivity extends AppCompatActivity {
         startActivity(newintent);
     };
 
+
+    // creates empty playlist w specified name
     private View.OnClickListener nameBtnListener = v -> {
         String playlistNameInput_string = playlistNameInput.getText().toString();
         if (playlistNameInput_string.isEmpty())
             playlistNameInput_string = "Generated Playlist";
 
         newPlaylist = playlistService.createPlaylist(userView.getText().toString(), playlistNameInput_string);
-
+        newPlaylistCreated = true;
     };
 
+    // adds songs to newly created playlist w seed search func
     private View.OnClickListener genBtnListener = v -> {
-        String lengthString = length_input.getText().toString();
-        if (length_input.getText().toString().isEmpty()) lengthOfPlaylist = 60;
-        else lengthOfPlaylist = Integer.parseInt(lengthString);
+        if (newPlaylistCreated) {
+            newPlaylist = playlistService.getPlaylist();
+            String lengthString = length_input.getText().toString();
+            if (length_input.getText().toString().isEmpty()) lengthOfPlaylist = 60; // default length = 60
+            else lengthOfPlaylist = Integer.parseInt(lengthString);
 
-        getSeekbarValues();
+            getSeekbarValues();
 
-        if (newPlaylist != null) {
-            getSeedSearchResults();
+            if (newPlaylist != null) {
+                getSeedSearchResults();
+            }
         }
     };
 
     public void getSeedSearchResults() {
-        for (int i = 0; i < 5; i++) {
-                songService.songSeedSearch(() -> {
-                    tracks = songService.getSongs();
-                    updateSong();
-                }, artists, inputHeaders[i] + "=" + specifications.get(i));
-        }
-    }
-    public void updateSong() {
-        for (int i = 0; i < 10; i++) { // should change depending on user length input
-            playlistService.addSongToPlaylist(tracks.get(i).getURI(), newPlaylist.getId());
-        }
+        songService.songSeedSearch(() -> {
+            tracks = songService.getSongs();
+            updateSong();
+        }, artists, specifications);
     }
 
-    private void updatePlaylist() {
-        if (playlists.size() > 0) {
-            userView.setText(playlists.get(0).getName());
-            this.playlist = playlists.get(0);
+    // TODO: length of loop (# songs) should change depending on user input length
+    public void updateSong() {
+        for (int i = 0; i < 10; i++) {
+            playlistService.addSongToPlaylist(tracks.get(i).getURI(), newPlaylist.getId());
         }
     }
 
@@ -288,22 +288,23 @@ public class GenPlaylistActivity extends AppCompatActivity {
         Double i_input;
         Double l_input;
         Double v_input;
+
         if ((a_input = convert100To1(acousticness_seekbar.getProgress())) == 0.0) {a_input = 0.5;}
         specifications.add(a_input); //set acousticness
 
-        if ((d_input = convert100To1(acousticness_seekbar.getProgress())) == 0.0) {d_input = 0.5;}
+        if ((d_input = convert100To1(danceability_seekbar.getProgress())) == 0.0) {d_input = 0.5;}
         specifications.add(d_input); //set
 
-        if ((e_input = convert100To1(acousticness_seekbar.getProgress())) == 0.0) {e_input = 0.5;}
+        if ((e_input = convert100To1(energy_seekbar.getProgress())) == 0.0) {e_input = 0.5;}
         specifications.add(e_input); //set
 
-        if ((i_input = convert100To1(acousticness_seekbar.getProgress())) == 0.0) {i_input = 0.5;}
+        if ((i_input = convert100To1(instrumentalness_seekbar.getProgress())) == 0.0) {i_input = 0.5;}
         specifications.add(i_input); //set
 
-        if ((l_input = convert100To1(acousticness_seekbar.getProgress())) == 0.0) {l_input = 0.5;}
+        if ((l_input = convert100To1(loudness_seekbar.getProgress())) == 0.0) {l_input = 0.5;}
         specifications.add(l_input); //set
 
-        if ((v_input = convert100To1(acousticness_seekbar.getProgress())) == 0.0) {v_input = 0.5;}
+        if ((v_input = convert100To1(valence_seekbar.getProgress())) == 0.0) {v_input = 0.5;}
         specifications.add(v_input); //set
 
 //        specifications.add(convert100To1(energy_seekbar.getProgress())); //set energy

@@ -235,51 +235,6 @@ public class SongService {
         return artists;
     }
 
-//    // get list of songs based on user input plus their top 5 artists
-//    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Artist> topArtists) {
-//        String[] artistURI = new String[5];
-//        for (int i = 0; i < 5; i++) {
-//            String[] splitArtistString = topArtists.get(i).getURI().split("artist:");
-//            artistURI[i] = splitArtistString[1];
-//        }
-//        String endpoint = "https://api.spotify.com/v1/recommendations?" +
-//                            "seed_artists=" + artistURI[0] + "," +
-//                            artistURI[1] + "," +
-//                            artistURI[2] + "," +
-//                            artistURI[3] + "," +
-//                            artistURI[4] +
-//                            "&min_energy=0.4&" + // TODO need to change to take in user input
-//                            "min_popularity=50";
-//
-//        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
-//                Request.Method.GET, endpoint, null, response -> {
-//            Gson gson = new Gson();
-//            JSONArray jsonArray = response.optJSONArray("tracks");
-//            for (int n = 0; n < jsonArray.length(); n++) {
-//                try {
-//                    JSONObject obj = jsonArray.getJSONObject(n);
-//                    song = gson.fromJson(obj.toString(), Song.class);
-//                    songs.add(song);
-//                }
-//                catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            callBack.onSuccess();
-//        }, error -> {
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> headers = new HashMap<>();
-//                String token = sharedPreferences.getString("token", "");
-//                String auth = "Bearer " + token;
-//                headers.put("Authorization", auth);
-//                return headers;
-//            }
-//        };
-//        queue.add(jsonObjectRequest);
-//        return songs;
-//    }
 
 
 //    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack) {
@@ -329,8 +284,7 @@ public class SongService {
         seed_genres - pop
         seed_tracks - 2tUBqZG2AbRi7Q0BIrVrEj (I Wanna Dance With Somebody)
      */
-//    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Double> specs) {
-    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Artist> topArtists, String criteria) {
+    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Artist> topArtists, ArrayList<Double> specs) {
         String[] artistURI = new String[5];
         for (int i = 0; i < 5; i++) {
             String[] splitArtistString = topArtists.get(i).getURI().split("artist:");
@@ -342,17 +296,12 @@ public class SongService {
                             artistURI[2] + "," +
                             artistURI[3] + "," +
                             artistURI[4] + "&" +
-                            criteria;
-//        String endpoint =   "https://api.spotify.com/v1/recommendations?market=US&limit=20&seed_artists=" +
-//                "4NHQUGzhtTLFvgF5SZesLK&seed_tracks=0c6xIDDpzE81m2q797ordA&" +
-//                criteria;
-//                "target_acousticness=" + specs.get(0) +
-//                "&target_danceability=" + specs.get(1) +
-//                "&min_energy=" + specs.get(2) +
-//                "&target_energy=" + specs.get(3) +
-//                "&max_instrumentalness=" + specs.get(4) +
-//                "&target_loudness=" + specs.get(5) +
-//                "&min_popularity=50&target_valence=0.65";
+                            "target_acousticness=" + specs.get(0) +
+                            "&target_danceability=" + specs.get(1) +
+                            "&min_energy=" + specs.get(2) +
+                            "&max_instrumentalness=" + specs.get(3) +
+                            "&target_loudness=" + specs.get(4) +
+                            "&target_valence=" + specs.get(5);
 
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.GET, endpoint, null, response -> {
