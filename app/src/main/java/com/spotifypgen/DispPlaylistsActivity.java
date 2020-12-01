@@ -102,9 +102,13 @@ public class DispPlaylistsActivity extends AppCompatActivity {
         else {
             playlistService.getUserPlaylists(()->{
             playlists = playlistService.getPlaylists();
+            editor = getSharedPreferences("SPOTIFY", 0).edit();
             playlistService.addSongToPlaylist(currentSong,playlists.get(itemPosition).getId());
             editor.putString("currentSong","");
             editor.apply();
+
+            Intent newintent = new Intent(DispPlaylistsActivity.this, SongSearchActivity.class);
+            startActivity(newintent);
         });
         }
 

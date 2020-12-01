@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
-        android:text="Playlist name"
+        android:text="@string/playlist_name"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,16 +29,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/displayAllPlaylistsBtn" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ListView
         android:id="@+id/tracksListView"
-        android:layout_width="239dp"
-        android:layout_height="331dp"
-        android:layout_marginStart="88dp"
-        android:layout_marginLeft="88dp"
-        android:layout_marginBottom="19dp"
+        android:layout_width="323dp"
+        android:layout_height="310dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginBottom="36dp"
         app:layout_constraintBottom_toTopOf="@+id/playlistFilterBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playlistName" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/playlistFilterBtn"

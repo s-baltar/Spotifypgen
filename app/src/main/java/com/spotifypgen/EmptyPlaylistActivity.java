@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class EmptyPlaylistActivity extends AppCompatActivity {
+    private SharedPreferences.Editor editor;
     private Button mainBtn;
     private Button addSongsBtn;
     private Button createEmptyPlaylistBtn;
@@ -42,16 +43,25 @@ public class EmptyPlaylistActivity extends AppCompatActivity {
 
         createEmptyPlaylistBtn = (Button) findViewById(R.id.createPlaylist_button);
         createEmptyPlaylistBtn.setOnClickListener(createEmptyPlaylistBtnListener);
-
     }
+
     private View.OnClickListener mainBtnListener = v -> {
         Intent newintent = new Intent(EmptyPlaylistActivity.this, MainActivity.class);
         startActivity(newintent);
     };
+
     private View.OnClickListener addSongsBtnListener = v -> {
+
+
+        editor = getSharedPreferences("SPOTIFY", 0).edit();
+        editor.putString("currentPlaylist", playlists.get(0).getId());
+        editor.putString("currentPlaylistName", playlists.get(0).getName());
+        editor.apply();
+
         Intent newintent = new Intent(EmptyPlaylistActivity.this, SongSearchActivity.class);
         startActivity(newintent);
     };
+
     private View.OnClickListener createEmptyPlaylistBtnListener = v -> {
         String playlistNameInput_string = playlistNameInput.getText().toString();
         if (playlistNameInput_string.isEmpty())

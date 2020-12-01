@@ -24,9 +24,11 @@ import java.util.Map;
 
 public class SongService {
     private ArrayList<Song> songs = new ArrayList<>();
+    private ArrayList<String> songsStr = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
     private Song song;
+    private String songStr;
 
     private ArrayList<Artist> artists = new ArrayList<>();
     private Artist artist;
@@ -466,19 +468,19 @@ public class SongService {
 
     public ArrayList<Song> getPlaylistItems(final VolleyCallBack callBack, String playlistID) {
 
-        String endpoint = "https://api.spotify.com/v1/playlists/"+playlistID+"/tracks";
+        String endpoint = "https://api.spotify.com/v1/playlists/"+playlistID+"/tracks?fields=items(track(name%2Curi%2Cid))";
 
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.GET, endpoint, null, response -> {
             Gson gson = new Gson();
-            JSONArray jsonArray = response.optJSONArray("tracks");
+            JSONArray jsonArray = response.optJSONArray("items");
             for (int n = 0; n < jsonArray.length(); n++) {
                 try {
-                    JSONObject obj = jsonArray.getJSONObject(n);
-                    song = gson.fromJson(obj.toString(), Song.class);
+                    JSONObject object = jsonArray.getJSONObject(n);
+                    object = object.optJSONObject("track");
+                    Song song = gson.fromJson(object.toString(), Song.class);
                     songs.add(song);
-                }
-                catch (JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }

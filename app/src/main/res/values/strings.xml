@@ -7,4 +7,10 @@
     <string name="artist">TextView</string>
     <string name="gen_playlist">Button</string>
     <string name="search">Search</string>
+    <string name="your_playlists">your playlists</string>
+    <string name="add_songs">add songs</string>
+    <string name="back_to_main">back to main</string>
+    <string name="edit_playlist">edit playlist</string>
+    <string name="delete_playlist">delete playlist</string>
+    <string name="playlist_name">Playlist name</string>
 </resources>

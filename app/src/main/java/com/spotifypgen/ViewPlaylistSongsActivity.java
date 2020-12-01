@@ -3,6 +3,7 @@ package com.spotifypgen;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,7 +26,7 @@ public class ViewPlaylistSongsActivity extends AppCompatActivity {
     private String currentPlaylist;
     private String currentPlaylistName;
     private ArrayList<Song> tracks;
-    private ArrayList<String> trackTitles;
+    private ArrayList<String> trackTitles = new ArrayList<>();
     private int itemPosition;
 
     @Override
@@ -71,14 +72,18 @@ public class ViewPlaylistSongsActivity extends AppCompatActivity {
     };
 
     private void displayTracks(){
-        //TODO we need to create a function that takes a playlist ID and returns its songs
-        // I created getPlaylistItems() but its not working
+        songService.getPlaylistItems(()->{
+            tracks = songService.getSongs();
+            updateTracks();
+            tracksListView = (ListView) findViewById(R.id.tracksListView);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_song_listview,R.id.songLabel, trackTitles);
+            tracksListView.setAdapter(adapter);
+        },currentPlaylist);
     }
 
     private void updateTracks() {
-        //playlists = playlistService.getPlaylists();
         for (int i = 0; i < tracks.size(); i++) {
-            trackTitles.add(this.tracks.get(i).getName());
+            trackTitles.add(tracks.get(i).getName());
         }
     }
 
