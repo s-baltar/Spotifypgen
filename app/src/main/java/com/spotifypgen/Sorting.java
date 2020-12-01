@@ -12,6 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 import static java.lang.Math.pow;
+import static java.lang.Math.random;
 import static java.lang.Math.sqrt;
 
 
@@ -144,7 +145,7 @@ public class Sorting {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1);
             if (isRepeated.containsKey(randomNum))
                 continue;
-
+            isRepeated.put(randomNum, true);
             i += bucket_moderate.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_moderate.get(randomNum));
         }
@@ -153,6 +154,7 @@ public class Sorting {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_high.size()-1);
             if (isRepeated.containsKey(randomNum))
                 continue;
+            isRepeated.put(randomNum, true);
             i += bucket_high.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_high.get(randomNum));
         }
@@ -161,6 +163,7 @@ public class Sorting {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1);
             if (isRepeated.containsKey(randomNum))
                 continue;
+            isRepeated.put(randomNum, true);
             i += bucket_moderate.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_moderate.get(randomNum));
         }
@@ -169,6 +172,7 @@ public class Sorting {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_low.size()-1);
             if (isRepeated.containsKey(randomNum))
                 continue;
+            isRepeated.put(randomNum, true);
             i += bucket_low.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_low.get(randomNum));
         }

@@ -268,21 +268,6 @@
         app:layout_constraintStart_toStartOf="@+id/genPlaylist_button"
         app:layout_constraintTop_toBottomOf="@+id/genPlaylist_button" />
 
-    <EditText
-        android:id="@+id/length_input"
-        android:layout_width="75dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginEnd="103dp"
-        android:layout_marginRight="103dp"
-        android:layout_marginBottom="28dp"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/genPlaylist_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/length_text" />
 
     <Button
         android:id="@+id/name_button"
