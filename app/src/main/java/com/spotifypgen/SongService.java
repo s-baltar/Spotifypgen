@@ -290,6 +290,7 @@ public class SongService {
             String[] splitArtistString = topArtists.get(i).getURI().split("artist:");
             artistURI[i] = splitArtistString[1];
         }
+
         String endpoint = "https://api.spotify.com/v1/recommendations?" +
                             "seed_artists=" + artistURI[0] + "," +
                             artistURI[1] + "," +
@@ -300,7 +301,7 @@ public class SongService {
                             "&target_danceability=" + specs.get(1) +
                             "&min_energy=" + specs.get(2) +
                             "&max_instrumentalness=" + specs.get(3) +
-                            "&target_loudness=" + specs.get(4) +
+//                            "&target_loudness=" + specs.get(4) + // TODO: scale LOUDNESS
                             "&target_valence=" + specs.get(5) +
                             "&limit=" + 100;
 

@@ -101,7 +101,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                sorter.setFeaturePreferences(Sorting.Feat.ACCOUSTICNESS, acousticness_seekbar.getProgress()/100);
+                sorter.setFeaturePreferences(Sorting.Feat.ACCOUSTICNESS, acousticness_seekbar.getProgress());
             }
         });
 
@@ -119,7 +119,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                sorter.setFeaturePreferences(Sorting.Feat.DANCEABILITY, danceability_seekbar.getProgress()/100);
+                sorter.setFeaturePreferences(Sorting.Feat.DANCEABILITY, danceability_seekbar.getProgress());
             }
         });
 
@@ -137,7 +137,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                sorter.setFeaturePreferences(Sorting.Feat.ENERGY, energy_seekbar.getProgress()/100);
+                sorter.setFeaturePreferences(Sorting.Feat.ENERGY, energy_seekbar.getProgress());
             }
         });
 
@@ -155,7 +155,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                sorter.setFeaturePreferences(Sorting.Feat.INSTRUMENTALNESS, instrumentalness_seekbar.getProgress()/100);
+                sorter.setFeaturePreferences(Sorting.Feat.INSTRUMENTALNESS, instrumentalness_seekbar.getProgress());
             }
         });
 
@@ -173,7 +173,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                sorter.setFeaturePreferences(Sorting.Feat.LOUDNESS, loudness_seekbar.getProgress()/100);
+                sorter.setFeaturePreferences(Sorting.Feat.LOUDNESS, loudness_seekbar.getProgress());
             }
         });
 
@@ -191,7 +191,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                sorter.setFeaturePreferences(Sorting.Feat.VALENCE, valence_seekbar.getProgress()/100);
+                sorter.setFeaturePreferences(Sorting.Feat.VALENCE, valence_seekbar.getProgress());
             }
         });
 
@@ -244,9 +244,8 @@ public class GenPlaylistActivity extends AppCompatActivity {
         }, artists, specifications);
     }
 
-    // TODO: length of loop (# songs) should change depending on user input length
     public void updateSong() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < genFeats.size(); i++) {
             playlistService.addSongToPlaylist(genFeats.get(i).getURI(), newPlaylist.getId());
         }
     }
@@ -262,7 +261,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
     // Info: Get user's 20 most recent saved tracks.
     private void getSavedTracks() {
-        songService.getSavedTracks((tracks) -> {
+        songService.getSavedTracks(() -> {
             tracks = songService.getSongs();
         }, 0, 20);
     }
@@ -295,36 +294,13 @@ public class GenPlaylistActivity extends AppCompatActivity {
         specifications(6) = length of playlist**
      */
     private void getSeekbarValues () {
-        Double a_input;
-        Double d_input;
-        Double e_input;
-        Double i_input;
-        Double l_input;
-        Double v_input;
-
-        if ((a_input = convert100To1(acousticness_seekbar.getProgress())) == 0.0) {a_input = 0.5;}
-        specifications.add(a_input); //set acousticness
-
-        if ((d_input = convert100To1(danceability_seekbar.getProgress())) == 0.0) {d_input = 0.5;}
-        specifications.add(d_input); //set
-
-        if ((e_input = convert100To1(energy_seekbar.getProgress())) == 0.0) {e_input = 0.5;}
-        specifications.add(e_input); //set
-
-        if ((i_input = convert100To1(instrumentalness_seekbar.getProgress())) == 0.0) {i_input = 0.5;}
-        specifications.add(i_input); //set
-
-        if ((l_input = convert100To1(loudness_seekbar.getProgress())) == 0.0) {l_input = 0.5;}
-        specifications.add(l_input); //set
-
-        if ((v_input = convert100To1(valence_seekbar.getProgress())) == 0.0) {v_input = 0.5;}
-        specifications.add(v_input); //set
-
-//        specifications.add(convert100To1(energy_seekbar.getProgress())); //set energy
-//        specifications.add(convert100To1(instrumentalness_seekbar.getProgress())); //set
-//        specifications.add(convert100To1(loudness_seekbar.getProgress())); //set
-//        specifications.add(convert100To1(valence_seekbar.getProgress())); //set
-//        specifications.add(convert100To1(length_seekbar.getProgress())); //set
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.ACCOUSTICNESS) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.DANCEABILITY) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.ENERGY) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.INSTRUMENTALNESS) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.LOUDNESS) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.VALENCE) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.LENGTH) );
     }
 
     private double convert100To1 (int value) {
