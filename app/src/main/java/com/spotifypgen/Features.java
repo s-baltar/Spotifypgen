@@ -12,6 +12,7 @@ public class Features {
     private double tempo;
     private double duration_ms;
     private String id;
+    private String uri;
 
     private double distance;
 
@@ -37,6 +38,10 @@ public class Features {
 
     public String getId() {
         return id;
+    }
+
+    public String getURI() {
+        return uri;
     }
 
     public double getDistance() { return distance; }
