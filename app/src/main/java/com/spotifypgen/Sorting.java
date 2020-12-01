@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
@@ -27,6 +28,7 @@ public class Sorting {
     }
 
     private HashMap<Feat, Double> featurePref = new HashMap<Feat, Double>();
+    private HashMap<Integer, Boolean> isRepeated = new HashMap<Integer, Boolean>();
     private ArrayList<Features> features = new ArrayList<>();
     private boolean isSavedTracks = false;
 
@@ -46,7 +48,18 @@ public class Sorting {
     // Param: Feat  - e.g. Feat.ENERGY
     //        value - Value of audio feature.
     public void setFeaturePreferences(Feat audioFeature, double value) {
-        featurePref.put(audioFeature, value);
+        if (audioFeature == Feat.LENGTH)
+            featurePref.put( audioFeature, value );
+        else if (audioFeature == Feat.LOUDNESS) {
+            double db = value; // TODO: Scale from [0,100] to [-60,0] dB
+            featurePref.put(audioFeature, db);
+        } else
+            featurePref.put( audioFeature, value / 100 );
+    }
+
+    // Get desired user preferred audio feature.
+    public double setFeaturePreferences(Feat audioFeature) {
+        return featurePref.get(audioFeature);
     }
 
     //  Info: Get desired user preferred audio feature.
@@ -93,12 +106,12 @@ public class Sorting {
     //   Ret: ArrayList of song IDs and features in sorted order to be added to playlist.
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public ArrayList<Features> sortBuckets() {
+
         ArrayList<Features> bucket = new ArrayList<Features>();
         ArrayList<Features> bucket_high = new ArrayList<Features>();
         ArrayList<Features> bucket_moderate = new ArrayList<Features>();
         ArrayList<Features> bucket_low = new ArrayList<Features>();
         ArrayList<Features> gen_playlist = new ArrayList<Features>();
-
 
         if (isSavedTracks) {
             // Filter out songs
@@ -119,7 +132,7 @@ public class Sorting {
         for (int i=tenthOfBucket; i< tenthOfBucket*3; i++)
             bucket_moderate.add(bucket.get(i));
 
-        for (int i=tenthOfBucket*3; i< tenthOfBucket*4; i++)
+        for (int i=tenthOfBucket*3; i< tenthOfBucket*5; i++)
             bucket_low.add(bucket.get(i));
 
         double duration = featurePref.get(Feat.LENGTH) * (60 * 1000);
@@ -127,25 +140,25 @@ public class Sorting {
 
         int randomNum = 0;
 
-        for (int i=0; i<=duration/10*2; i+=bucket_moderate.get(randomNum).getDuration_ms()) {
+        for (int i=0; i<=duration/10*2;) {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1);
             i += bucket_moderate.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_moderate.get(randomNum));
         }
 
-        for (int i=0; i<=duration/10*5; i+=bucket_high.get(randomNum).getDuration_ms()) {
+        for (int i=0; i<=duration/10*5;) {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_high.size()-1);
             i += bucket_high.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_high.get(randomNum));
         }
 
-        for (int i=0; i<=duration/10*2; i+=bucket_moderate.get(randomNum).getDuration_ms()) {
+        for (int i=0; i<=duration/10*2;) {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1);
             i += bucket_moderate.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_moderate.get(randomNum));
         }
 
-        for (int i=0; i<=duration/10; i+=bucket_low.get(randomNum).getDuration_ms()) {
+        for (int i=0; i<=duration/10;) {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_low.size()-1);
             i += bucket_low.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_low.get(randomNum));
