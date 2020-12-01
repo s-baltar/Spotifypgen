@@ -28,6 +28,9 @@ public class Sorting {
 
     private HashMap<Feat, Double> featurePref = new HashMap<Feat, Double>();
     private ArrayList<Features> features = new ArrayList<>();
+    private boolean isSavedTracks = false;
+
+    final double DISTANCE_CUTTOFF = 4;
 
     public Sorting() {
         featurePref.put(Feat.DANCEABILITY, 0.5);
@@ -70,21 +73,10 @@ public class Sorting {
         return sqrt(sqrtArg);
     }
 
-    //  Info: Sort distances in ascending.
+    //  Info: Sort distances in ascending. Only to be used for saved tracks.
     // Param: preferences - User's desired audio features.
     //   Ret: ArrayList<Features> - features that are closest to preferences.
     public void sortDistance() {
-        Log.d("SB", "sortDistance()"); // SB: tmp
-        if (features == null) {
-            Log.d("SB", "features is null");
-            return;
-        } else if (features.size() <= 0) { // SB: tmp
-            Log.d("SB", "features is empty");
-            return;
-        } else { // SB: tmp
-            Log.d("SB", "not null");
-            Log.d("SB", features.get(0).getId());
-        }
 
         // Calculate all song 'distances'
         for (int i = 0; i < features.size(); i++)
@@ -94,7 +86,11 @@ public class Sorting {
         Collections.sort(features, new Sortbydistance());
     }
 
-
+    //  Info: Filters out songs that exceed a certain 'distance'.
+    //        Distributes songs into bucket levels based on the songs tempo.
+    //        Randomly picks songs from each bucket without exceeding user's desired playlist
+    //        duration.
+    //   Ret: ArrayList of song IDs and features in sorted order to be added to playlist.
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public ArrayList<Features> sortBuckets() {
         ArrayList<Features> bucket = new ArrayList<Features>();
@@ -103,18 +99,16 @@ public class Sorting {
         ArrayList<Features> bucket_low = new ArrayList<Features>();
         ArrayList<Features> gen_playlist = new ArrayList<Features>();
 
-        // Filter out songs
-        for (int i=0; i<features.size(); i++) {
-            if (features.get(i).getDistance() > 4) { // SB: Play with this number
-                break;
-            }
-            bucket.add(features.get(i));
-        }
 
-        if (bucket.size() <= 0) { // SB: tmp
-            Log.d("SB", "bucket is empty");
-            return null;
-        }
+        if (isSavedTracks) {
+            // Filter out songs
+            for (int i = 0; i < features.size(); i++) {
+                if (features.get(i).getDistance() > DISTANCE_CUTTOFF)
+                    break;
+                bucket.add(features.get(i));
+            }
+        } else // Otherwise use given features
+            bucket = features;
 
         Collections.sort(bucket, new Sortbytempo());
         int tenthOfBucket = (int) (bucket.size()/10);
@@ -157,12 +151,15 @@ public class Sorting {
             gen_playlist.add(bucket_low.get(randomNum));
         }
 
-        // SB: tmp
-        for (int i=0; i<gen_playlist.size(); i++) {
-            Log.d("SB", gen_playlist.get(i).getId());
-        }
-
         return gen_playlist;
     }
 
+    // Sorts songs based on audio features.
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public ArrayList<Features> sortFeatures(ArrayList<Features> f) {
+        if (isSavedTracks)
+            sortDistance();
+        setFeatures(f);
+        return sortBuckets();
+    }
 }
