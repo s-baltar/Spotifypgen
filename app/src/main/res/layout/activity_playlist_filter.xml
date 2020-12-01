@@ -40,11 +40,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="40dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginTop="32dp"
 
-        android:layout_marginBottom="8dp"
         android:text="Enter name of new playlist:"
         android:textSize="18sp"
 
@@ -55,9 +53,9 @@
         android:id="@+id/playlistNameInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="@string/p_nameInput"
         android:inputType="text"
@@ -65,15 +63,17 @@
         app:layout_constraintStart_toStartOf="@+id/playlist_text"
         app:layout_constraintTop_toBottomOf="@+id/playlist_text" />
 
+
     <TextView
         android:id="@+id/filterText"
         android:layout_width="318dp"
         android:layout_height="46dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="16dp"
         android:text="Enter playlist preferences on scale from 0.0 to 1.0 (default value is 0.5)"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="@+id/guidelineX"
         app:layout_constraintTop_toBottomOf="@id/playlistNameInput" />
-
 
     <TextView
         android:id="@+id/acousticness_text"
@@ -225,12 +225,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
         android:text="Length of playlist"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/valence_text" />
-
 
 
     <EditText
@@ -241,7 +240,6 @@
         android:ems="10"
         android:hint="(min)"
         android:inputType="number"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/length_text"
         />
@@ -250,13 +248,14 @@
         android:id="@+id/genPlaylist_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="22dp"
         android:layout_marginRight="22dp"
         android:text="Generate Playlist"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.551"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/length_input" />
+        app:layout_constraintTop_toBottomOf="@+id/length_text" />
 
     <Button
         android:id="@+id/genPlaylistMain_button"
@@ -269,17 +268,32 @@
         app:layout_constraintStart_toStartOf="@+id/genPlaylist_button"
         app:layout_constraintTop_toBottomOf="@+id/genPlaylist_button" />
 
-
+    <EditText
+        android:id="@+id/length_input"
+        android:layout_width="75dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginRight="103dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/genPlaylist_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/length_text" />
 
     <Button
         android:id="@+id/name_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="88dp"
+        android:layout_height="44dp"
         android:text="Enter"
         app:layout_constraintBottom_toTopOf="@+id/filterText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/playlistNameInput"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:layout_constraintVertical_bias="0.258" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

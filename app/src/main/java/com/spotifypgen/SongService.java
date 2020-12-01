@@ -79,7 +79,7 @@ public class SongService {
     // returns array of user's saved (liked) songs
     public ArrayList<Song> getSavedTracks(final VolleyCallBack callBack, int offset, int limit) {
         String endpoint = "https://api.spotify.com/v1/me/tracks?offset=" + String.valueOf(offset) +
-                                                               "&limit=" + String.valueOf(limit);
+                "&limit=" + String.valueOf(limit);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, endpoint, null, response -> {
@@ -159,7 +159,7 @@ public class SongService {
     }
 
 
-//  search song by track name
+    //  search song by track name
     public ArrayList<Song> songSearch(final VolleyCallBack callBack,String searchCriteria) {
         String endpoint = "https://api.spotify.com/v1/search?q="+searchCriteria+"&type=track&market=US";
 
@@ -168,17 +168,17 @@ public class SongService {
             Gson gson = new Gson();
             JSONObject object = response.optJSONObject("tracks");
             JSONArray jsonArray = object.optJSONArray("items");
-                for (int n = 0; n < jsonArray.length(); n++) {
-                    try {
-                        JSONObject obj = jsonArray.getJSONObject(n);
-                        song = gson.fromJson(obj.toString(), Song.class);
-                        songs.add(song);
-                    }
-                    catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            for (int n = 0; n < jsonArray.length(); n++) {
+                try {
+                    JSONObject obj = jsonArray.getJSONObject(n);
+                    song = gson.fromJson(obj.toString(), Song.class);
+                    songs.add(song);
                 }
-                callBack.onSuccess();
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            callBack.onSuccess();
         }, error -> {
         }) {
             @Override
@@ -407,5 +407,96 @@ public class SongService {
         }
 
         return features;
+    }
+
+    // requests to delete a track from the user's library using the DELETE method
+    // the Spotify API uses the unfollow feature to achieve this
+    public void deleteTrack(String songURI) {
+        String endpoint = "https://api.spotify.com/v1/playlists/"+songURI+"/followers";
+
+        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
+                Request.Method.DELETE, endpoint, null, response -> {
+        }, error -> {
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+                headers.put("Content-Type", "application/json");
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
+    // requests to delete songs from the user's library using the DELETE method
+    // the Spotify API uses the unfollow feature to achieve this
+    public void deleteTracks(ArrayList<String> songURIs) {
+
+        String songs = new String();
+
+        songs = songs + songURIs.get(0);
+
+        for (int i = 1; i < songURIs.size(); i++) {
+            songs = songs + "," + songURIs.get(i);
+        }
+
+        String endpoint = "https://api.spotify.com/me/tracks?/ids="+songs;
+
+        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
+                Request.Method.DELETE, endpoint, null, response -> {
+        }, error -> {
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+                headers.put("Content-Type", "application/json");
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
+    public ArrayList<Song> getPlaylistItems(final VolleyCallBack callBack, String playlistID) {
+
+        String endpoint = "https://api.spotify.com/v1/playlists/"+playlistID+"/tracks";
+
+        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
+                Request.Method.GET, endpoint, null, response -> {
+            Gson gson = new Gson();
+            JSONArray jsonArray = response.optJSONArray("tracks");
+            for (int n = 0; n < jsonArray.length(); n++) {
+                try {
+                    JSONObject obj = jsonArray.getJSONObject(n);
+                    song = gson.fromJson(obj.toString(), Song.class);
+                    songs.add(song);
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            callBack.onSuccess();
+        }, error -> {
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+                headers.put("Content-Type", "application/json");
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+        return songs;
     }
 }

@@ -30,6 +30,7 @@ public class SplashActivity extends AppCompatActivity {
                                          "user-read-private," +
                                          "user-library-read," +
                                          "user-top-read," +
+                                         "playlist-modify-private," +
                                          "playlist-modify-public," +
                                          "playlist-read-collaborative," +
                                          "playlist-read-private";
@@ -67,6 +68,9 @@ public class SplashActivity extends AppCompatActivity {
                 case TOKEN:
                     editor = getSharedPreferences("SPOTIFY", 0).edit();
                     editor.putString("token", response.getAccessToken());
+                    editor.putString("currentSong","");
+                    editor.putString("currentPlaylist","");
+                    editor.putString("currentPlaylistName","");
                     Log.d("STARTING", "GOT AUTH TOKEN");
                     editor.apply();
                     waitForUserInfo();

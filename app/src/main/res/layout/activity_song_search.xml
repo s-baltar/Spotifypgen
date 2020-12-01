@@ -20,7 +20,7 @@
         app:layout_constraintGuide_percent="0.1"/>
 
     <EditText
-        android:id="@+id/songSearchInput"
+        android:id="@+id/songSearchInput_fp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
@@ -33,17 +33,17 @@
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <Button
-        android:id="@+id/songSearchButton"
+        android:id="@+id/songSearchButton_fp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/songSearchInput" />
+        app:layout_constraintTop_toBottomOf="@+id/songSearchInput_fp" />
 
     <Button
-        android:id="@+id/songMain_button"
+        android:id="@+id/songMain_button_fp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -56,8 +56,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addToPlaylist_button"
-        app:layout_constraintVertical_bias="0.227" />
+        app:layout_constraintTop_toBottomOf="@+id/addToPlaylist_button_fp"
+        app:layout_constraintVertical_bias="0.018" />
 
     <Button
         android:id="@+id/saveSong_button"
@@ -71,10 +71,10 @@
         android:text="Save song"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/songSearchListView" />
+        app:layout_constraintTop_toBottomOf="@+id/songSearchListView_fp" />
 
     <Button
-        android:id="@+id/addToPlaylist_button"
+        android:id="@+id/addToPlaylist_button_fp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -88,9 +88,11 @@
         app:layout_constraintTop_toBottomOf="@+id/saveSong_button" />
 
     <ListView
-        android:id="@+id/songSearchListView"
+        android:id="@+id/songSearchListView_fp"
         android:layout_width="392dp"
         android:layout_height="207dp"
+        android:choiceMode="singleChoice"
+        android:listSelector="#666666"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
@@ -100,6 +102,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/songSearchButton" />
+        app:layout_constraintTop_toBottomOf="@+id/songSearchButton_fp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

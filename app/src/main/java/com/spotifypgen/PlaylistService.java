@@ -77,15 +77,13 @@ public class PlaylistService {
         return playlist;
     }
 
-    // deletes a playlist
-    // the spotify API uses the unfollow feature to achieve this
-    public void deletePlaylist(String user_id, Playlist playlist) {
-        String endpoint = "https://api.spotify.com/v1/users/playlists/"+ playlist.getId()+"/followers";
-
-        //JSONObject payload = preparePostPayload(playlistName);
+    // requests to delete a user user's playlist using the DELETE method
+    // the Spotify API uses the unfollow feature to achieve this
+    public void deletePlaylist(String playlistURI) {
+        String endpoint = "https://api.spotify.com/v1/playlists/"+playlistURI+"/followers";
 
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
-                Request.Method.POST, endpoint, null, response -> {
+                Request.Method.DELETE, endpoint, null, response -> {
         }, error -> {
         }) {
             @Override
@@ -95,6 +93,7 @@ public class PlaylistService {
                 String auth = "Bearer " + token;
                 headers.put("Authorization", auth);
                 headers.put("Content-Type", "application/json");
+                headers.put("Accept", "application/json");
                 return headers;
             }
         };
@@ -174,4 +173,28 @@ public class PlaylistService {
         };
     }
 
+
+
+//    public void addSongToPlaylist(String songURI_id, String playlistURI) {
+//        String endpoint = "https://api.spotify.com/v1/playlists/3cEYpjA9oz9GiPac4AsH4n/tracks?uris=spotify%3Atrack%3A4iV5W9uYEdYUVa79Axb7Rh%2Cspotify%3Atrack%3A1301WleyT98MSxVHPZCA6M";
+////        playlist = new Playlist();
+//        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
+//                Request.Method.POST, endpoint, payload, response -> {
+//            Gson gson = new Gson();
+//            playlist = gson.fromJson(response.toString(),Playlist.class);
+//        }, error -> {
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", "");
+//                String auth = "Bearer " + token;
+//                headers.put("Authorization", auth);
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
+//        queue.add(jsonObjectRequest);
+//        return playlist;
+//    }
 }
