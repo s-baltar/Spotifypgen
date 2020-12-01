@@ -32,7 +32,6 @@ public class SongService {
     private Artist artist;
 
     private ArrayList<Features> features = new ArrayList<>();
-    private Features feature;
 
     public SongService(Context context) {
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
@@ -116,7 +115,7 @@ public class SongService {
     //  Info: Only gets 1000 most recently saved songs.
     public ArrayList<Song> getAllSavedTracks(final VolleyCallBack callBack) {
         for (int i=0; i<1000; i+=20) {
-            getSavedTracks(() -> {
+            getSavedTracks( ()-> {
             }, i, 20);
         }
         callBack.onSuccess();
@@ -201,6 +200,7 @@ public class SongService {
     public ArrayList<Artist> getArtists() {
         return artists;
     }
+
     // get user's top 5 artists
     public ArrayList<Artist> getTopArtists(final VolleyCallBack callBack) {
         String endpoint = "https://api.spotify.com/v1/me/top/artists?limit=5";
@@ -290,18 +290,20 @@ public class SongService {
             String[] splitArtistString = topArtists.get(i).getURI().split("artist:");
             artistURI[i] = splitArtistString[1];
         }
+
         String endpoint = "https://api.spotify.com/v1/recommendations?" +
-                "seed_artists=" + artistURI[0] + "," +
-                artistURI[1] + "," +
-                artistURI[2] + "," +
-                artistURI[3] + "," +
-                artistURI[4] + "&" +
-                "target_acousticness=" + specs.get(0) +
-                "&target_danceability=" + specs.get(1) +
-                "&min_energy=" + specs.get(2) +
-                "&max_instrumentalness=" + specs.get(3) +
-                "&target_loudness=" + specs.get(4) +
-                "&target_valence=" + specs.get(5);
+                            "seed_artists=" + artistURI[0] + "," +
+                            artistURI[1] + "," +
+                            artistURI[2] + "," +
+                            artistURI[3] + "," +
+                            artistURI[4] + "&" +
+                            "target_acousticness=" + specs.get(0) +
+                            "&target_danceability=" + specs.get(1) +
+                            "&min_energy=" + specs.get(2) +
+                            "&max_instrumentalness=" + specs.get(3) +
+//                            "&target_loudness=" + specs.get(4) + // TODO: scale LOUDNESS
+                            "&target_valence=" + specs.get(5) +
+                            "&limit=" + 100;
 
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.GET, endpoint, null, response -> {
@@ -341,7 +343,7 @@ public class SongService {
         String ids = "";
 
         for (int i=offset; i<tracks.size() && i<100+offset; i++)
-            ids = ids.concat( tracks.get(i).getId() + ",");
+            ids = ids.concat(tracks.get(i).getId() + ",");
 
         ids = ids.substring( 0, ids.length()-1 ); // Remove "," for last ID.
 
@@ -353,7 +355,7 @@ public class SongService {
     //        Can only query features for 100 songs at a time.
     // Param: endpoint
     //   Ret: ArrayList of Features
-    private ArrayList<Features> getFeatures(final VolleyCallBack callBack, String endpoint) {
+    private ArrayList<Features> getFeatures(final VolleyCallBackFeatList callBack, String endpoint) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, endpoint, null, response -> {
                     Gson gson = new Gson();
@@ -368,7 +370,7 @@ public class SongService {
                             e.printStackTrace();
                         }
                     }
-                    callBack.onSuccess();
+                    callBack.onSuccess(features);
                 }, error -> {
                 }) {
             @Override
@@ -389,19 +391,22 @@ public class SongService {
     //  Info: Get audio features for given songs.
     // Param: tracks - ArrayList of Songs.
     //   Ret: ArrayList of Song
-    public ArrayList<Song> getAudioFeatures(final VolleyCallBack callBack, ArrayList<Song> tracks) {
-
+    public ArrayList<Features> getAudioFeatures(final VolleyCallBackFeatList callBack, ArrayList<Song> tracks) {
         int offset = 0;
+
         while ( offset < tracks.size() ) {
             String ids = getIds(tracks, offset);
             String endpoint = "https://api.spotify.com/v1/audio-features/?ids=" + ids;
-            getFeatures(()->{
+
+            getFeatures((feats) -> {
+                features = feats;
+                callBack.onSuccess(features);
             }, endpoint);
+
             offset += 100;
         }
 
-        callBack.onSuccess(); // SB: ??? When done.
-        return songs;
+        return features;
     }
 
     // requests to delete a track from the user's library using the DELETE method

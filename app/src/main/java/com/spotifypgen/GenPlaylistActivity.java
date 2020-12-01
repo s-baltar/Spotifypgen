@@ -2,26 +2,33 @@ package com.spotifypgen;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class GenPlaylistActivity extends AppCompatActivity {
 
     private TextView userView;
     private SongService songService;
     private PlaylistService playlistService;
+    private Sorting sorter;
     private EditText playlistNameInput;
     private ArrayList<Song> tracks = new ArrayList<>();
     private ArrayList<Song> allTracks = new ArrayList<>();
     private ArrayList<Playlist> playlists = new ArrayList<>();
+    private ArrayList<Features> features = new ArrayList<>();
+    private ArrayList<Features> genFeats = new ArrayList<>();
     private Playlist playlist;
     private String[] inputHeaders = new String[]{"target_acousticness","target_danceability","target_energy",
             "max_instrumentalness","target_loudness","target_valence"};
@@ -54,6 +61,8 @@ public class GenPlaylistActivity extends AppCompatActivity {
     private Button mainBtn;
     private Button genBtn;
     private Button nameBtn;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +70,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
         songService = new SongService(getApplicationContext());
         playlistService = new PlaylistService(getApplicationContext());
+        sorter = new Sorting();
 
         userView = (TextView) findViewById(R.id.user);
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
@@ -81,18 +91,17 @@ public class GenPlaylistActivity extends AppCompatActivity {
 //            int currentProgress = 50;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                currentProgress = progress;
-                //specifications.add(seekBar.getProgress());
+
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //specifications.add(seekBar.getProgress());
+
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //specifications.add(seekBar.getProgress());
+                sorter.setFeaturePreferences(Sorting.Feat.ACCOUSTICNESS, acousticness_seekbar.getProgress());
             }
         });
 
@@ -110,7 +119,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                sorter.setFeaturePreferences(Sorting.Feat.DANCEABILITY, danceability_seekbar.getProgress());
             }
         });
 
@@ -128,7 +137,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                sorter.setFeaturePreferences(Sorting.Feat.ENERGY, energy_seekbar.getProgress());
             }
         });
 
@@ -146,7 +155,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                sorter.setFeaturePreferences(Sorting.Feat.INSTRUMENTALNESS, instrumentalness_seekbar.getProgress());
             }
         });
 
@@ -164,7 +173,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                sorter.setFeaturePreferences(Sorting.Feat.LOUDNESS, loudness_seekbar.getProgress());
             }
         });
 
@@ -182,7 +191,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                sorter.setFeaturePreferences(Sorting.Feat.VALENCE, valence_seekbar.getProgress());
             }
         });
 
@@ -207,13 +216,18 @@ public class GenPlaylistActivity extends AppCompatActivity {
         newPlaylistCreated = true;
     };
 
+
     // adds songs to newly created playlist w seed search func
     private View.OnClickListener genBtnListener = v -> {
         if (newPlaylistCreated) {
             newPlaylist = playlistService.getPlaylist();
             String lengthString = length_input.getText().toString();
-            if (length_input.getText().toString().isEmpty()) lengthOfPlaylist = 60; // default length = 60
-            else lengthOfPlaylist = Integer.parseInt(lengthString);
+            if (length_input.getText().toString().isEmpty())
+                lengthOfPlaylist = 60; // default length = 60
+            else {
+                lengthOfPlaylist = Integer.parseInt(lengthString);
+                sorter.setFeaturePreferences(Sorting.Feat.LENGTH, lengthOfPlaylist);
+            }
 
             getSeekbarValues();
 
@@ -224,16 +238,15 @@ public class GenPlaylistActivity extends AppCompatActivity {
     };
 
     public void getSeedSearchResults() {
-        songService.songSeedSearch(() -> {
+            songService.songSeedSearch(() -> {
             tracks = songService.getSongs();
-            updateSong();
+                getAudioFeatures();
         }, artists, specifications);
     }
 
-    // TODO: length of loop (# songs) should change depending on user input length
     public void updateSong() {
-        for (int i = 0; i < 10; i++) {
-            playlistService.addSongToPlaylist(tracks.get(i).getURI(), newPlaylist.getId());
+        for (int i = 0; i < genFeats.size(); i++) {
+            playlistService.addSongToPlaylist(genFeats.get(i).getURI(), newPlaylist.getId());
         }
     }
 
@@ -247,27 +260,26 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
 
     // Info: Get user's 20 most recent saved tracks.
-    // TODO: Add arguments to get earlier saved tracks.
     private void getSavedTracks() {
         songService.getSavedTracks(() -> {
             tracks = songService.getSongs();
-            getAudioFeatures();
         }, 0, 20);
     }
 
 
-    private void getAllSavedTracks() {
-        songService.getAllSavedTracks( () -> {
+    private void getAllSavedTracks()  {
+        songService.getAllSavedTracks(() -> {
             tracks = songService.getSongs();
-            getAudioFeatures();
         });
     }
 
 
     // Info: Get several tracks audio features.
     private void getAudioFeatures() {
-        songService.getAudioFeatures(()->{
-            tracks = songService.getSongs();
+        songService.getAudioFeatures((feats) -> {
+            features = feats;
+            genFeats = sorter.sortFeatures(features);
+            updateSong();
         }, tracks);
     }
 
@@ -282,36 +294,13 @@ public class GenPlaylistActivity extends AppCompatActivity {
         specifications(6) = length of playlist**
      */
     private void getSeekbarValues () {
-        Double a_input;
-        Double d_input;
-        Double e_input;
-        Double i_input;
-        Double l_input;
-        Double v_input;
-
-        if ((a_input = convert100To1(acousticness_seekbar.getProgress())) == 0.0) {a_input = 0.5;}
-        specifications.add(a_input); //set acousticness
-
-        if ((d_input = convert100To1(danceability_seekbar.getProgress())) == 0.0) {d_input = 0.5;}
-        specifications.add(d_input); //set
-
-        if ((e_input = convert100To1(energy_seekbar.getProgress())) == 0.0) {e_input = 0.5;}
-        specifications.add(e_input); //set
-
-        if ((i_input = convert100To1(instrumentalness_seekbar.getProgress())) == 0.0) {i_input = 0.5;}
-        specifications.add(i_input); //set
-
-        if ((l_input = convert100To1(loudness_seekbar.getProgress())) == 0.0) {l_input = 0.5;}
-        specifications.add(l_input); //set
-
-        if ((v_input = convert100To1(valence_seekbar.getProgress())) == 0.0) {v_input = 0.5;}
-        specifications.add(v_input); //set
-
-//        specifications.add(convert100To1(energy_seekbar.getProgress())); //set energy
-//        specifications.add(convert100To1(instrumentalness_seekbar.getProgress())); //set
-//        specifications.add(convert100To1(loudness_seekbar.getProgress())); //set
-//        specifications.add(convert100To1(valence_seekbar.getProgress())); //set
-//        specifications.add(convert100To1(length_seekbar.getProgress())); //set
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.ACCOUSTICNESS) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.DANCEABILITY) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.ENERGY) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.INSTRUMENTALNESS) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.LOUDNESS) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.VALENCE) );
+        specifications.add( sorter.getFeaturePreferences(Sorting.Feat.LENGTH) );
     }
 
     private double convert100To1 (int value) {
@@ -323,6 +312,4 @@ public class GenPlaylistActivity extends AppCompatActivity {
             artists = songService.getArtists();
         });
     }
-
-
 }
