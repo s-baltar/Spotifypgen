@@ -29,7 +29,6 @@ public class Sorting {
     }
 
     private HashMap<Feat, Double> featurePref = new HashMap<Feat, Double>();
-    private HashMap<Integer, Boolean> isRepeated = new HashMap<Integer, Boolean>();
     private ArrayList<Features> features = new ArrayList<>();
     private boolean isSavedTracks = false;
 
@@ -143,36 +142,24 @@ public class Sorting {
 
         for (int i=0; i<=duration/10*2;) {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1);
-            if (isRepeated.containsKey(randomNum))
-                continue;
-            isRepeated.put(randomNum, true);
             i += bucket_moderate.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_moderate.get(randomNum));
         }
 
         for (int i=0; i<=duration/10*5;) {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_high.size()-1);
-            if (isRepeated.containsKey(randomNum))
-                continue;
-            isRepeated.put(randomNum, true);
             i += bucket_high.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_high.get(randomNum));
         }
 
         for (int i=0; i<=duration/10*2;) {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1);
-            if (isRepeated.containsKey(randomNum))
-                continue;
-            isRepeated.put(randomNum, true);
             i += bucket_moderate.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_moderate.get(randomNum));
         }
 
         for (int i=0; i<=duration/10;) {
             randomNum = ThreadLocalRandom.current().nextInt(0, bucket_low.size()-1);
-            if (isRepeated.containsKey(randomNum))
-                continue;
-            isRepeated.put(randomNum, true);
             i += bucket_low.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_low.get(randomNum));
         }
