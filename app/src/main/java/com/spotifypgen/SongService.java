@@ -165,7 +165,7 @@ public class SongService {
     //  search song by track name
     public ArrayList<Song> songSearch(final VolleyCallBack callBack,String searchCriteria) {
         String endpoint = "https://api.spotify.com/v1/search?q="+searchCriteria+"&type=track&market=US";
-
+        songs.clear();
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.GET, endpoint, null, response -> {
             Gson gson = new Gson();

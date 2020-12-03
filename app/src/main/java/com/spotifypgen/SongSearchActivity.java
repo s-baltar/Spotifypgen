@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,10 +29,11 @@ public class SongSearchActivity extends AppCompatActivity {
     private Playlist playlist;
     private ArrayList<Playlist> playlists = new ArrayList<>();
     private ArrayList<Song> tracks = new ArrayList<>();; // Recently played tracks or user's saved tracks
-    public ArrayList<String> songTitles;
+    public ArrayList<String> songTitles = new ArrayList<>();
     private ListView listView;
     private String currentPlaylist;
     private int itemPosition; // position of item on ListView
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +60,11 @@ public class SongSearchActivity extends AppCompatActivity {
 
         songService = new SongService(getApplicationContext());
         playlistService = new PlaylistService(getApplicationContext());
+        listView = (ListView) findViewById(R.id.songSearchListView_fp);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_song_listview,R.id.songLabel, songTitles);
+//        listView.setAdapter(adapter);
 
+//        activateListViewClickListener();
     }
 
     private View.OnClickListener saveSongBtnListener = v-> {
@@ -100,27 +106,21 @@ public class SongSearchActivity extends AppCompatActivity {
     };
 
     private View.OnClickListener searchBtnListener = v -> {
-
         searchString = searchCriteria.getText().toString();
         dispSearch();
-        updateSong();
-        listView = (ListView) findViewById(R.id.songSearchListView_fp);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_song_listview,R.id.songLabel, songTitles);
-        listView.setAdapter(adapter);
-
-        activateListViewClickListener();
-
     };
 
-    private void updateSong() {
-        songTitles = new ArrayList<>();
-        for (int i = 0; i < tracks.size(); i++) {
-            songTitles.add(tracks.get(i).getName());
-        }
-    }
+
     private void dispSearch() {
         songService.songSearch(() -> {
+            songTitles.clear();
             tracks = songService.getSongs();
+            for (int i = 0; i < tracks.size(); i++) {
+                songTitles.add(tracks.get(i).getName());
+            }
+            adapter = new ArrayAdapter<String>(this, R.layout.activity_song_listview, R.id.songLabel, songTitles);
+            listView.setAdapter(adapter);
+            activateListViewClickListener();
         }, searchString);
     }
 
