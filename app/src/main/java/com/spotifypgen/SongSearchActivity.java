@@ -45,6 +45,7 @@ public class SongSearchActivity extends AppCompatActivity {
         mainBtn.setOnClickListener(mainBtnListener);
 
         searchCriteria = (EditText) findViewById(R.id.songSearchInput_fp);
+        searchString = searchCriteria.getText().toString();
 
         searchBtn = (Button) findViewById(R.id.songSearchButton_fp);
         searchBtn.setOnClickListener(searchBtnListener);

@@ -16,17 +16,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class ViewPlaylistSongsActivity extends AppCompatActivity {
-    private Button mainBtn;
     private SongService songService;
     private PlaylistService playlistService;
     private TextView playlistTextView;
     private ListView tracksListView;
+    private Button mainBtn;
     private Button playlistFilterBtn;
     private Button displayAllSavePlaylistsBtn;
+
     private String currentPlaylist;
     private String currentPlaylistName;
     private ArrayList<Song> tracks;
     private ArrayList<String> trackTitles = new ArrayList<>();
+    private ArrayList<Artist> artists = new ArrayList<>();
+    private ArrayList<String> artistNames = new ArrayList<>();
     private int itemPosition;
 
     @Override
@@ -44,10 +47,10 @@ public class ViewPlaylistSongsActivity extends AppCompatActivity {
         mainBtn = (Button) findViewById(R.id.viewPlaylistSongsMain_button);
         mainBtn.setOnClickListener(mainBtnListener);
 
-        displayAllSavePlaylistsBtn = (Button) findViewById(R.id.viewPlaylistSongsMain_button);
+        displayAllSavePlaylistsBtn = (Button) findViewById(R.id.displayAllPlaylistsBtn);
         displayAllSavePlaylistsBtn.setOnClickListener(displayAllSavePlaylistsBtnListener);
 
-        playlistFilterBtn = (Button) findViewById(R.id.viewPlaylistSongsMain_button);
+        playlistFilterBtn = (Button) findViewById(R.id.playlistFilterBtn);
         playlistFilterBtn.setOnClickListener(playlistFilterBtnListener);
 
         playlistService = new PlaylistService(getApplicationContext());
@@ -73,8 +76,7 @@ public class ViewPlaylistSongsActivity extends AppCompatActivity {
 
     private void displayTracks(){
         songService.getPlaylistItems(()->{
-            tracks = songService.getSongs();
-            updateTracks();
+            trackTitles = songService.getTrackArtists();
             tracksListView = (ListView) findViewById(R.id.tracksListView);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_song_listview,R.id.songLabel, trackTitles);
             tracksListView.setAdapter(adapter);
@@ -83,7 +85,7 @@ public class ViewPlaylistSongsActivity extends AppCompatActivity {
 
     private void updateTracks() {
         for (int i = 0; i < tracks.size(); i++) {
-            trackTitles.add(tracks.get(i).getName());
+            trackTitles.add(tracks.get(i).getName() + " - " + artists.get(i).getName());
         }
     }
 
