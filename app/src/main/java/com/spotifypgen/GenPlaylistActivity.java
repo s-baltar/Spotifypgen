@@ -69,6 +69,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
     private Button genBtn;
     private Button nameBtn;
 
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +81,8 @@ public class GenPlaylistActivity extends AppCompatActivity {
         playlistService = new PlaylistService(getApplicationContext());
         sorter = new Sorting();
 
-        userView = (TextView) findViewById(R.id.user);
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
-        //userView.setText("Getting to create a fire playlist "+sharedPreferences.getString("username", "No User")+"!");
+        userID = sharedPreferences.getString("username", "No User");
 
 //        mainBtn = (Button) findViewById(R.id.genPlaylistMain_button);
 //        mainBtn.setOnClickListener(mainBtnListener);
@@ -253,16 +253,22 @@ public class GenPlaylistActivity extends AppCompatActivity {
     // creates empty playlist w specified name
     private View.OnClickListener nameBtnListener = v -> {
         String playlistNameInput_string = playlistNameInput.getText().toString();
+
         if (playlistNameInput_string.isEmpty())
             playlistNameInput_string = "Generated Playlist";
 
-        newPlaylist = playlistService.createPlaylist(userView.getText().toString(), playlistNameInput_string);
+        newPlaylist = playlistService.createPlaylist(userID , playlistNameInput_string);
         newPlaylistCreated = true;
     };
 
 
-    // adds songs to newly created playlist w seed search func
+
     private View.OnClickListener genBtnListener = v -> {
+        generatePlaylist();
+    };
+
+    // adds songs to newly created playlist w seed search func
+    private void generatePlaylist() {
         if (newPlaylistCreated) {
             newPlaylist = playlistService.getPlaylist();
             String lengthString = length_input.getText().toString();
@@ -279,7 +285,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
                 getSeedSearchResults();
             }
         }
-    };
+    }
 
     public void getSeedSearchResults() {
             songService.songSeedSearch(() -> {
