@@ -94,11 +94,12 @@ public class EmptyPlaylistActivity extends AppCompatActivity {
         startActivity(newintent);
     };
 
+
     private View.OnClickListener addSongsBtnListener = v -> {
 
 
         editor = getSharedPreferences("SPOTIFY", 0).edit();
-        editor.putString("currentPlaylist", playlists.get(0).getId());
+        editor.putString("currentPlaylist", playlists.get(0).getId()); // TODO CHANGE THIS - CRASHES
         editor.putString("currentPlaylistName", playlists.get(0).getName());
         editor.apply();
 

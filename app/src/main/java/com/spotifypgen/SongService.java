@@ -34,6 +34,7 @@ public class SongService {
     private Artist artist;
 
     private ArrayList<Features> features = new ArrayList<>();
+    ArrayList <String> trackTitles = new ArrayList<>();
 
     public SongService(Context context) {
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
@@ -164,7 +165,7 @@ public class SongService {
     //  search song by track name
     public ArrayList<Song> songSearch(final VolleyCallBack callBack,String searchCriteria) {
         String endpoint = "https://api.spotify.com/v1/search?q="+searchCriteria+"&type=track&market=US";
-
+        songs.clear();
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.GET, endpoint, null, response -> {
             Gson gson = new Gson();
@@ -466,7 +467,7 @@ public class SongService {
         queue.add(jsonObjectRequest);
     }
 
-    public ArrayList<Song> getPlaylistItems(final VolleyCallBack callBack, String playlistID) {
+    public ArrayList<String> getPlaylistItems(final VolleyCallBack callBack, String playlistID) {
 
         String endpoint = "https://api.spotify.com/v1/playlists/"+playlistID+"/tracks?fields=items(track(name%2Curi%2Cid))";
 
@@ -477,9 +478,10 @@ public class SongService {
             for (int n = 0; n < jsonArray.length(); n++) {
                 try {
                     JSONObject object = jsonArray.getJSONObject(n);
-                    object = object.optJSONObject("track");
-                    Song song = gson.fromJson(object.toString(), Song.class);
+                    JSONObject trackObject = object.optJSONObject("track");
+                    Song song = gson.fromJson(trackObject.toString(), Song.class);
                     songs.add(song);
+                    trackTitles.add(song.getName());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -499,6 +501,9 @@ public class SongService {
             }
         };
         queue.add(jsonObjectRequest);
-        return songs;
+        return trackTitles;
+    }
+    public ArrayList<String> getTrackArtists() {
+        return trackTitles;
     }
 }

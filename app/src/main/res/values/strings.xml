@@ -10,7 +10,7 @@
     <string name="your_playlists">your playlists</string>
     <string name="add_songs">add songs</string>
     <string name="back_to_main">back to main</string>
-    <string name="edit_playlist">edit playlist</string>
+    <string name="view_playlist">view playlist</string>
     <string name="delete_playlist">delete playlist</string>
     <string name="playlist_name">Playlist name</string>
     <!-- TODO: Remove or change this placeholder text -->
