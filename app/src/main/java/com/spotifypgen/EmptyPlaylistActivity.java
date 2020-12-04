@@ -29,6 +29,7 @@ public class EmptyPlaylistActivity extends AppCompatActivity {
     private EditText playlistNameInput;
     private ArrayList<Playlist> playlists = new ArrayList<>();
     private BottomNavigationView bottomNavigationView;
+    private Playlist emptyPlaylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,16 +114,10 @@ public class EmptyPlaylistActivity extends AppCompatActivity {
             playlistNameInput_string = "Generated Playlist";
 
         playlistService.createPlaylist(() -> {
+            emptyPlaylist = playlistService.getPlaylist();
+            playlistCreatedText.setText(emptyPlaylist.getName() + " created");
         }, userID, playlistNameInput_string);
 
-        // disp that empty playlist was created
-        // not updating to display newest created playlist if we create another empty playlist
-        playlistService.getUserPlaylists(() -> {
-            playlists = playlistService.getPlaylists();
-            if (playlists.size() > 0) {
-                playlistCreatedText.setText(playlists.get(0).getName() + " created");
-            }
-        });
     };
 
 
