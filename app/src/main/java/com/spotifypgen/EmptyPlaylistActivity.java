@@ -30,6 +30,7 @@ public class EmptyPlaylistActivity extends AppCompatActivity {
     private ArrayList<Playlist> playlists = new ArrayList<>();
     private BottomNavigationView bottomNavigationView;
     private Playlist emptyPlaylist;
+    private boolean emptyPlaylistCreated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class EmptyPlaylistActivity extends AppCompatActivity {
 
         createEmptyPlaylistBtn = (Button) findViewById(R.id.createPlaylist_button);
         createEmptyPlaylistBtn.setOnClickListener(createEmptyPlaylistBtnListener);
+        emptyPlaylistCreated = false;
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod= new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -98,14 +100,15 @@ public class EmptyPlaylistActivity extends AppCompatActivity {
 
     private View.OnClickListener addSongsBtnListener = v -> {
 
+        if (emptyPlaylistCreated) {
+            editor = getSharedPreferences("SPOTIFY", 0).edit();
+            editor.putString("currentPlaylist", emptyPlaylist.getId());
+            editor.putString("currentPlaylistName", emptyPlaylist.getName());
+            editor.apply();
 
-        editor = getSharedPreferences("SPOTIFY", 0).edit();
-        editor.putString("currentPlaylist", playlists.get(0).getId()); // TODO CHANGE THIS - CRASHES
-        editor.putString("currentPlaylistName", playlists.get(0).getName());
-        editor.apply();
-
-        Intent newintent = new Intent(EmptyPlaylistActivity.this, SongSearchActivity.class);
-        startActivity(newintent);
+            Intent newintent = new Intent(EmptyPlaylistActivity.this, SongSearchActivity.class);
+            startActivity(newintent);
+        }
     };
 
     private View.OnClickListener createEmptyPlaylistBtnListener = v -> {
@@ -116,6 +119,7 @@ public class EmptyPlaylistActivity extends AppCompatActivity {
         playlistService.createPlaylist(() -> {
             emptyPlaylist = playlistService.getPlaylist();
             playlistCreatedText.setText(emptyPlaylist.getName() + " created");
+            emptyPlaylistCreated = true;
         }, userID, playlistNameInput_string);
 
     };
