@@ -5,14 +5,19 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -35,6 +40,8 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
     private Playlist newPlaylist;
     private ArrayList<Artist> artists = new ArrayList<>();
+
+    private BottomNavigationView bottomNavigationView;
     /*
     Store seekbar values
     specifications(0) = acousticness
@@ -65,6 +72,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist_filter);
 
@@ -74,13 +82,18 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
         userView = (TextView) findViewById(R.id.user);
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
-        userView.setText(sharedPreferences.getString("userid", "No User"));
+        //userView.setText("Getting to create a fire playlist "+sharedPreferences.getString("username", "No User")+"!");
 
-        mainBtn = (Button) findViewById(R.id.genPlaylistMain_button);
-        mainBtn.setOnClickListener(mainBtnListener);
+//        mainBtn = (Button) findViewById(R.id.genPlaylistMain_button);
+//        mainBtn.setOnClickListener(mainBtnListener);
+
+        bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
+        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
 
         genBtn = (Button) findViewById(R.id.genPlaylist_button);
         genBtn.setOnClickListener(genBtnListener);
+
         nameBtn = (Button) findViewById(R.id.name_button);
         nameBtn.setOnClickListener(nameBtnListener);
 
@@ -199,6 +212,37 @@ public class GenPlaylistActivity extends AppCompatActivity {
         getArtists();
 
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod= new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            Fragment fragment = null;
+            switch (item.getItemId())
+            {
+                case R.id.home:
+                    fragment = new HomeFragment();
+                    Intent newintent1 = new Intent(GenPlaylistActivity.this, MainActivity.class);
+                    startActivity(newintent1);
+                    break;
+
+                case R.id.search:
+                    fragment = new SearchFragment();
+                    Intent newintent2 = new Intent(GenPlaylistActivity.this, SongSearchActivity.class);
+                    startActivity(newintent2);
+                    break;
+
+                case R.id.account:
+                    fragment = new AccountFragment();
+                    Intent newintent3 = new Intent(GenPlaylistActivity.this, UserAccountActivity.class);
+                    startActivity(newintent3);
+                    break;
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
+
+            return false;
+        }
+    };
 
     private View.OnClickListener mainBtnListener = v -> {
         Intent newintent = new Intent(GenPlaylistActivity.this, MainActivity.class);

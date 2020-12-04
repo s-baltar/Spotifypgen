@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,7 +12,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -28,9 +33,11 @@ public class ViewPlaylistSongsActivity extends AppCompatActivity {
     private ArrayList<Song> tracks;
     private ArrayList<String> trackTitles = new ArrayList<>();
     private int itemPosition;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist_songs);
 
@@ -41,21 +48,55 @@ public class ViewPlaylistSongsActivity extends AppCompatActivity {
         playlistTextView = (TextView) findViewById(R.id.playlistName);
         playlistTextView.setText(currentPlaylistName);
 
-        mainBtn = (Button) findViewById(R.id.viewPlaylistSongsMain_button);
-        mainBtn.setOnClickListener(mainBtnListener);
+//        mainBtn = (Button) findViewById(R.id.viewPlaylistSongsMain_button);
+//        mainBtn.setOnClickListener(mainBtnListener);
+        bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
+        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
 
-        displayAllSavePlaylistsBtn = (Button) findViewById(R.id.viewPlaylistSongsMain_button);
+        displayAllSavePlaylistsBtn = (Button) findViewById(R.id.displayAllPlaylistsBtn);
         displayAllSavePlaylistsBtn.setOnClickListener(displayAllSavePlaylistsBtnListener);
 
-        playlistFilterBtn = (Button) findViewById(R.id.viewPlaylistSongsMain_button);
+        playlistFilterBtn = (Button) findViewById(R.id.playlistFilterBtn);
         playlistFilterBtn.setOnClickListener(playlistFilterBtnListener);
 
         playlistService = new PlaylistService(getApplicationContext());
         songService = new SongService(getApplicationContext());
 
         displayTracks();
-
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod= new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            Fragment fragment = null;
+            switch (item.getItemId())
+            {
+                case R.id.home:
+                    fragment = new HomeFragment();
+                    Intent newintent1 = new Intent(ViewPlaylistSongsActivity.this, MainActivity.class);
+                    startActivity(newintent1);
+                    break;
+
+                case R.id.search:
+                    fragment = new SearchFragment();
+                    Intent newintent2 = new Intent(ViewPlaylistSongsActivity.this, SongSearchActivity.class);
+                    startActivity(newintent2);
+                    break;
+
+                case R.id.account:
+                    fragment = new AccountFragment();
+                    Intent newintent3 = new Intent(ViewPlaylistSongsActivity.this, UserAccountActivity.class);
+                    startActivity(newintent3);
+                    break;
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
+
+            return false;
+        }
+    };
+
     private View.OnClickListener mainBtnListener = v -> {
         Intent newintent = new Intent(ViewPlaylistSongsActivity.this, MainActivity.class);
         startActivity(newintent);

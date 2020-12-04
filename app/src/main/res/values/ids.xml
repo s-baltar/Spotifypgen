@@ -2,4 +2,5 @@
 <resources>
     <item name="song" type="id" />
     <item name="playlist" type="id" />
+    <item name="songSearch_button" type="id"/>
 </resources>

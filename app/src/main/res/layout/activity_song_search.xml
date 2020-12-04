@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#f6f6f6">
 
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
@@ -19,13 +20,26 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.1"/>
 
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottomNev"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/menu"/>
+
     <EditText
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="80dp"
         android:id="@+id/songSearchInput_fp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginLeft="56dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="40dp"
         android:ems="10"
         android:hint="Search"
         android:inputType="textPersonName"
@@ -33,39 +47,26 @@
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <Button
+        android:textColor="@color/white"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="300dp"
         android:id="@+id/songSearchButton_fp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:text="Search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/songSearchInput_fp" />
 
     <Button
-        android:id="@+id/songMain_button_fp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="Back to main"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addToPlaylist_button_fp"
-        app:layout_constraintVertical_bias="0.018" />
-
-    <Button
+        android:textColor="@color/white"
+        android:layout_marginTop="550dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/saveSong_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="Save song"
@@ -74,34 +75,36 @@
         app:layout_constraintTop_toBottomOf="@+id/songSearchListView_fp" />
 
     <Button
+        android:textColor="@color/white"
+        android:layout_marginTop="500dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/addToPlaylist_button_fp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="add to a playlist"
+        android:text="add to playlist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/saveSong_button" />
 
     <ListView
         android:id="@+id/songSearchListView_fp"
-        android:layout_width="392dp"
-        android:layout_height="207dp"
-        android:choiceMode="singleChoice"
-        android:listSelector="#666666"
-        android:layout_alignParentBottom="true"
+        android:layout_width="340dp"
+        android:layout_height="234dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:choiceMode="singleChoice"
+        android:listSelector="#666666"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/songSearchButton_fp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

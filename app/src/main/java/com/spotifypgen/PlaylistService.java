@@ -56,7 +56,6 @@ public class PlaylistService {
     public Playlist createPlaylist(String user_id, String playlistName) {
         String endpoint = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
         JSONObject payload = preparePostPayload(playlistName);
-//        playlist = new Playlist();
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.POST, endpoint, payload, response -> {
                     Gson gson = new Gson();

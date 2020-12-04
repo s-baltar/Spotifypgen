@@ -3,6 +3,7 @@ package com.spotifypgen;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,7 +11,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -29,19 +34,25 @@ public class DispPlaylistsActivity extends AppCompatActivity {
     private PlaylistService playlistService;
     private String currentSong;
     private String currentPlaylist;
+    private BottomNavigationView bottomNavigationView;
 
     int itemPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_disp_playlists);
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         currentSong = sharedPreferences.getString("currentSong","");
         currentPlaylist = sharedPreferences.getString("currentPlaylist","");
 
-        mainBtn = (Button) findViewById(R.id.dispPlaylistsMain_button);
-        mainBtn.setOnClickListener(mainBtnListener);
+//        mainBtn = (Button) findViewById(R.id.dispPlaylistsMain_button);
+//        mainBtn.setOnClickListener(mainBtnListener);
+
+        bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
+        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
 
         editPlaylistBtn = (Button) findViewById(R.id.editPlaylist_button);
         editPlaylistBtn.setOnClickListener(editPlaylistBtnListener);
@@ -57,6 +68,38 @@ public class DispPlaylistsActivity extends AppCompatActivity {
         displayPlaylists();
 
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod= new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            Fragment fragment = null;
+            switch (item.getItemId())
+            {
+                case R.id.home:
+                    fragment = new HomeFragment();
+                    Intent newintent1 = new Intent(DispPlaylistsActivity.this, MainActivity.class);
+                    startActivity(newintent1);
+                    break;
+
+                case R.id.search:
+                    fragment = new SearchFragment();
+                    Intent newintent2 = new Intent(DispPlaylistsActivity.this, SongSearchActivity.class);
+                    startActivity(newintent2);
+                    break;
+
+                case R.id.account:
+                    fragment = new AccountFragment();
+                    Intent newintent3 = new Intent(DispPlaylistsActivity.this, UserAccountActivity.class);
+                    startActivity(newintent3);
+                    break;
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
+
+            return false;
+        }
+    };
+
     private View.OnClickListener mainBtnListener = v -> {
         Intent newintent = new Intent(DispPlaylistsActivity.this, MainActivity.class);
         startActivity(newintent);

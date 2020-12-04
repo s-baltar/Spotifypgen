@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
-    tools:context=".GenPlaylistActivity">
+    tools:context=".GenPlaylistActivity"
+    android:background="#f6f6f6">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -21,27 +22,44 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.1" />
 
-    <TextView
-        android:id="@+id/user"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
+        android:id="@+id/bottomNev"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/menu"/>
 
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+<!--    <TextView-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:id="@+id/user"-->
+<!--        android:textSize="30dp"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_marginBottom="40dp"-->
+
+<!--        android:text="User Name"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0" />-->
 
 
     <TextView
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/playlist_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
         android:layout_marginLeft="56dp"
-        android:layout_marginTop="32dp"
 
         android:text="Enter name of new playlist:"
         android:textSize="18sp"
@@ -50,12 +68,13 @@
         app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
     <EditText
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/playlistNameInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="@string/p_nameInput"
         android:inputType="text"
@@ -65,29 +84,33 @@
 
 
     <TextView
+        android:layout_marginTop="130dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/filterText"
         android:layout_width="318dp"
         android:layout_height="46dp"
         android:layout_marginLeft="4dp"
-        android:layout_marginTop="16dp"
         android:text="Enter playlist preferences on scale from 0.0 to 1.0 (default value is 0.5)"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="@+id/guidelineX"
         app:layout_constraintTop_toBottomOf="@id/playlistNameInput" />
 
     <TextView
+        android:layout_marginTop="220dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/acousticness_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="10dp"
         android:text="Acousticness"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterText" />
 
     <SeekBar
+        android:layout_marginTop="250dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/acousticness_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,18 +123,21 @@
         app:layout_constraintTop_toBottomOf="@id/acousticness_text" />
 
     <TextView
+        android:layout_marginTop="270dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/danceability_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="20dp"
         android:text="Danceability"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/acousticness_text" />
 
     <SeekBar
+        android:layout_marginTop="300dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/danceability_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -124,18 +150,21 @@
         app:layout_constraintTop_toBottomOf="@id/danceability_text" />
 
     <TextView
+        android:layout_marginTop="320dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/energy_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="24dp"
         android:text="Energy"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/danceability_text" />
 
     <SeekBar
+        android:layout_marginTop="350dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/energy_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -148,18 +177,21 @@
         app:layout_constraintTop_toBottomOf="@id/energy_text" />
 
     <TextView
+        android:layout_marginTop="370dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/instrumentalness_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="24dp"
         android:text="Instrumentalness"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/energy_text" />
 
     <SeekBar
+        android:layout_marginTop="400dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/instrumentalness_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -172,18 +204,21 @@
         app:layout_constraintTop_toBottomOf="@id/instrumentalness_text" />
 
     <TextView
+        android:layout_marginTop="420dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/loudness_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="20dp"
         android:text="Loudness"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instrumentalness_text" />
 
     <SeekBar
+        android:layout_marginTop="450dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/loudness_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -196,18 +231,21 @@
         app:layout_constraintTop_toBottomOf="@id/loudness_text" />
 
     <TextView
+        android:layout_marginTop="470dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/valence_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="20dp"
         android:text="Valence (Happiness)"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loudness_text" />
 
     <SeekBar
+        android:layout_marginTop="500dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/valence_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -220,12 +258,13 @@
         app:layout_constraintTop_toBottomOf="@id/valence_text" />
 
     <TextView
+        android:layout_marginTop="520dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/length_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="36dp"
         android:text="Length of playlist"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -233,10 +272,11 @@
 
 
     <EditText
+        android:layout_marginTop="550dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/length_input"
         android:layout_width="75dp"
         android:layout_height="42dp"
-        android:layout_marginLeft="150dp"
         android:ems="10"
         android:hint="(min)"
         android:inputType="number"
@@ -245,10 +285,12 @@
         />
 
     <Button
+        android:layout_marginTop="600dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
         android:id="@+id/genPlaylist_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
         android:layout_marginEnd="22dp"
         android:layout_marginRight="22dp"
         android:text="Generate Playlist"
@@ -257,19 +299,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/length_text" />
 
-    <Button
-        android:id="@+id/genPlaylistMain_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="12dp"
-        android:text="Back to Main"
-        app:layout_constraintStart_toStartOf="@+id/genPlaylist_button"
-        app:layout_constraintTop_toBottomOf="@+id/genPlaylist_button" />
+<!--    <Button-->
+<!--        android:id="@+id/genPlaylistMain_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="22dp"-->
+<!--        android:layout_marginLeft="22dp"-->
+<!--        android:layout_marginTop="12dp"-->
+<!--        android:text="Back to Main"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/genPlaylist_button"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/genPlaylist_button" />-->
 
 
     <Button
+        android:layout_marginTop="50dp"
+        android:layout_toRightOf="@+id/playlistNameInput"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
         android:id="@+id/name_button"
         android:layout_width="88dp"
         android:layout_height="44dp"
@@ -281,4 +327,4 @@
         app:layout_constraintTop_toTopOf="@+id/guideline"
         app:layout_constraintVertical_bias="0.258" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
