@@ -112,7 +112,8 @@ public class EmptyPlaylistActivity extends AppCompatActivity {
         if (playlistNameInput_string.isEmpty())
             playlistNameInput_string = "Generated Playlist";
 
-        playlistService.createPlaylist(userID, playlistNameInput_string);
+        playlistService.createPlaylist(() -> {
+        }, userID, playlistNameInput_string);
 
         // disp that empty playlist was created
         // not updating to display newest created playlist if we create another empty playlist

@@ -94,8 +94,8 @@ public class GenPlaylistActivity extends AppCompatActivity {
         genBtn = (Button) findViewById(R.id.genPlaylist_button);
         genBtn.setOnClickListener(genBtnListener);
 
-        nameBtn = (Button) findViewById(R.id.name_button);
-        nameBtn.setOnClickListener(nameBtnListener);
+//        nameBtn = (Button) findViewById(R.id.name_button);
+//        nameBtn.setOnClickListener(nameBtnListener);
 
         playlistNameInput = (EditText) findViewById(R.id.playlistNameInput);
 
@@ -251,15 +251,15 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
 
     // creates empty playlist w specified name
-    private View.OnClickListener nameBtnListener = v -> {
-        String playlistNameInput_string = playlistNameInput.getText().toString();
-
-        if (playlistNameInput_string.isEmpty())
-            playlistNameInput_string = "Generated Playlist";
-
-        newPlaylist = playlistService.createPlaylist(userID , playlistNameInput_string);
-        newPlaylistCreated = true;
-    };
+//    private View.OnClickListener nameBtnListener = v -> {
+//        String playlistNameInput_string = playlistNameInput.getText().toString();
+//
+//        if (playlistNameInput_string.isEmpty())
+//            playlistNameInput_string = "Generated Playlist";
+//
+//        newPlaylist = playlistService.createPlaylist(userID , playlistNameInput_string);
+//        newPlaylistCreated = true;
+//    };
 
 
 
@@ -269,7 +269,12 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
     // adds songs to newly created playlist w seed search func
     private void generatePlaylist() {
-        if (newPlaylistCreated) {
+        String playlistNameInput_string = playlistNameInput.getText().toString();
+
+        if (playlistNameInput_string.isEmpty())
+            playlistNameInput_string = "Generated Playlist";
+
+        playlistService.createPlaylist(() -> {
             newPlaylist = playlistService.getPlaylist();
             String lengthString = length_input.getText().toString();
             if (length_input.getText().toString().isEmpty())
@@ -278,13 +283,11 @@ public class GenPlaylistActivity extends AppCompatActivity {
                 lengthOfPlaylist = Integer.parseInt(lengthString);
                 sorter.setFeaturePreferences(Sorting.Feat.LENGTH, lengthOfPlaylist);
             }
-
             getSeekbarValues();
-
             if (newPlaylist != null) {
                 getSeedSearchResults();
             }
-        }
+            }, userID, playlistNameInput_string);
     }
 
     public void getSeedSearchResults() {

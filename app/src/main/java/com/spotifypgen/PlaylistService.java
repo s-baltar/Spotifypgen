@@ -53,13 +53,14 @@ public class PlaylistService {
 
 
     // create empty playlist
-    public Playlist createPlaylist(String user_id, String playlistName) {
+    public Playlist createPlaylist(final VolleyCallBack callBack, String user_id, String playlistName) {
         String endpoint = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
         JSONObject payload = preparePostPayload(playlistName);
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.POST, endpoint, payload, response -> {
                     Gson gson = new Gson();
                     playlist = gson.fromJson(response.toString(),Playlist.class);
+            callBack.onSuccess();
         }, error -> {
         }) {
             @Override
