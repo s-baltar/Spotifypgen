@@ -239,54 +239,6 @@ public class SongService {
     }
 
 
-
-//    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack) {
-//        String endpoint =   "https://api.spotify.com/v1/recommendations?market=US&seed_artists=" +
-//                "4NHQUGzhtTLFvgF5SZesLK&seed_tracks=0c6xIDDpzE81m2q797ordA&" +
-//                "target_acousticness=0.4&" +
-//                "target_danceability=0.65&" +
-//                "min_energy=0.65&" +
-//                "target_energy=0.65&" +
-//                "max_instrumentalness=0.65&" +
-//                "target_loudness=0.65&" +
-//                "min_popularity=50&target_valence=0.65";
-//
-//        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
-//                Request.Method.GET, endpoint, null, response -> {
-//            Gson gson = new Gson();
-//            JSONArray jsonArray = response.optJSONArray("tracks");
-//            for (int n = 0; n < jsonArray.length(); n++) {
-//                try {
-//                    JSONObject obj = jsonArray.getJSONObject(n);
-//                    song = gson.fromJson(obj.toString(), Song.class);
-//                    songs.add(song);
-//                }
-//                catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            callBack.onSuccess();
-//        }, error -> {
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> headers = new HashMap<>();
-//                String token = sharedPreferences.getString("token", "");
-//                String auth = "Bearer " + token;
-//                headers.put("Authorization", auth);
-//                return headers;
-//            }
-//        };
-//        queue.add(jsonObjectRequest);
-//        return songs;
-//    }
-
-    //songSeedOverload
-    /*
-        seed_artists - 6XpaIBNiVzIetEPCWDvAFP (Whitney Houston)
-        seed_genres - pop
-        seed_tracks - 2tUBqZG2AbRi7Q0BIrVrEj (I Wanna Dance With Somebody)
-     */
     public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Artist> topArtists, ArrayList<Double> specs) {
         String[] artistURI = new String[5];
         for (int i = 0; i < 5; i++) {

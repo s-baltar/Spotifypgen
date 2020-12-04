@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class GenPlaylistActivity extends AppCompatActivity {
+    private SharedPreferences.Editor editor;
 
     private TextView userView;
     private SongService songService;
@@ -287,6 +288,9 @@ public class GenPlaylistActivity extends AppCompatActivity {
             if (newPlaylist != null) {
                 getSeedSearchResults();
             }
+
+            Intent newintent = new Intent(GenPlaylistActivity.this, DispPlaylistsActivity.class);
+            startActivity(newintent);
             }, userID, playlistNameInput_string);
     }
 

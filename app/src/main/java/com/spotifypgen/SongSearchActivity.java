@@ -127,6 +127,7 @@ public class SongSearchActivity extends AppCompatActivity {
             startActivity(newintent);
         }
         else {
+//            editor.putString("currentPlaylist", currentPlaylist);
             playlistService.addSongToPlaylist(tracks.get(itemPosition).getURI(),currentPlaylist);
             Intent newintent = new Intent(SongSearchActivity.this, ViewPlaylistSongsActivity.class);
             startActivity(newintent);
