@@ -81,7 +81,7 @@
         android:id="@+id/editPlaylist_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/edit_playlist"
+        android:text="@string/view_playlist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 

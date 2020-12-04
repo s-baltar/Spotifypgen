@@ -33,11 +33,13 @@ public class SongSearchActivity extends AppCompatActivity {
     private Playlist playlist;
     private ArrayList<Playlist> playlists = new ArrayList<>();
     private ArrayList<Song> tracks = new ArrayList<>();; // Recently played tracks or user's saved tracks
-    public ArrayList<String> songTitles;
+    public ArrayList<String> songTitles = new ArrayList<>();
     private ListView listView;
     private String currentPlaylist;
     private int itemPosition; // position of item on ListView
     private BottomNavigationView bottomNavigationView;
+    private ArrayAdapter<String> adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class SongSearchActivity extends AppCompatActivity {
 
         songService = new SongService(getApplicationContext());
         playlistService = new PlaylistService(getApplicationContext());
+        listView = (ListView) findViewById(R.id.songSearchListView_fp);
 
     }
 
@@ -142,12 +145,6 @@ public class SongSearchActivity extends AppCompatActivity {
 
         searchString = searchCriteria.getText().toString();
         dispSearch();
-        updateSong();
-        listView = (ListView) findViewById(R.id.songSearchListView_fp);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_song_listview,R.id.songLabel, songTitles);
-        listView.setAdapter(adapter);
-
-        activateListViewClickListener();
 
     };
 
@@ -159,7 +156,14 @@ public class SongSearchActivity extends AppCompatActivity {
     }
     private void dispSearch() {
         songService.songSearch(() -> {
+            songTitles.clear();
             tracks = songService.getSongs();
+            for (int i = 0; i < tracks.size(); i++) {
+                songTitles.add(tracks.get(i).getName());
+            }
+            adapter = new ArrayAdapter<String>(this, R.layout.activity_song_listview, R.id.songLabel, songTitles);
+            listView.setAdapter(adapter);
+            activateListViewClickListener();
         }, searchString);
     }
 
