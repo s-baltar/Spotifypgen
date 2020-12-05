@@ -32,8 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
+        //getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
 
         userView = (TextView) findViewById(R.id.user);
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
@@ -53,33 +52,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod= new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
 
-            Fragment fragment = null;
-            switch (item.getItemId())
-            {
-                case R.id.home:
-                    fragment = new HomeFragment();
-                    break;
+        switch (item.getItemId())
+        {
+            case R.id.home:
+                break;
 
-                case R.id.search:
-                    fragment = new SearchFragment();
-                    Intent newintent1 = new Intent(MainActivity.this, SongSearchActivity.class);
-                    startActivity(newintent1);
-                    break;
+            case R.id.search:
+                Intent newintent1 = new Intent(MainActivity.this, SongSearchActivity.class);
+                startActivity(newintent1);
+                break;
 
-                case R.id.account:
-                    fragment = new AccountFragment();
-                    Intent newintent2 = new Intent(MainActivity.this, UserAccountActivity.class);
-                    startActivity(newintent2);
-                    break;
-            }
-            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
-
-            return false;
+            case R.id.account:
+                Intent newintent2 = new Intent(MainActivity.this, UserAccountActivity.class);
+                startActivity(newintent2);
+                break;
         }
+        return true;
     };
 
     private View.OnClickListener genPlaylistBtnListener = v -> {
