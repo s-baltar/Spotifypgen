@@ -282,7 +282,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
                 lengthOfPlaylist = 60; // default length = 60
             else {
                 lengthOfPlaylist = Integer.parseInt(lengthString);
-                sorter.setFeaturePreferences(Sorting.Feat.LENGTH, lengthOfPlaylist);
+                sorter.setFeaturePreferences(Sorting.Feat.LENGTH, (double)lengthOfPlaylist);
             }
             getSeekbarValues();
             if (newPlaylist != null) {

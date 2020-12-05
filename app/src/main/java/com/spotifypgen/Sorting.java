@@ -103,6 +103,7 @@ public class Sorting {
     //        Distributes songs into bucket levels based on the songs tempo.
     //        Randomly picks songs from each bucket without exceeding user's desired playlist
     //        duration.
+    //        Minimum amount of songs in the generated playlist is four. One for each 'bucket'.
     //   Ret: ArrayList of song IDs and features in sorted order to be added to playlist.
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public ArrayList<Features> sortBuckets() {
@@ -126,67 +127,91 @@ public class Sorting {
         Collections.sort(bucket, new Sortbytempo());
         int tenthOfBucket = (int) (bucket.size()/10);
 
-        for (int i=0; i<tenthOfBucket ; i++)
+        for (int i=0; i<tenthOfBucket*2 ; i++)
             bucket_high.add(bucket.get(i));
 
-        for (int i=tenthOfBucket; i< tenthOfBucket*3; i++)
+        for (int i=tenthOfBucket*2; i< tenthOfBucket*4; i++)
             bucket_moderate.add(bucket.get(i));
 
-        for (int i=tenthOfBucket*3; i< tenthOfBucket*5; i++)
+        for (int i=tenthOfBucket*4; i< bucket.size(); i++)
             bucket_low.add(bucket.get(i));
 
-        double duration = featurePref.get(Feat.LENGTH) * (60 * 1000);
+        int duration = (int)(featurePref.get(Feat.LENGTH) * (60 * 1000));
 
 
         int randomNum = 0;
+        int i = bucket_moderate.get(randomNum).getDuration_ms();
+        do { // Add moderate tempo songs to playlist
 
-        for (int i=0; i<=duration/10*2 && bucket_moderate.size() > 0;) {
-
-            randomNum = ( bucket_moderate.size() != 1 )
-                    ? ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1)
-                    : 0;
-
-            i += bucket_moderate.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_moderate.get(randomNum));
 
             bucket_moderate.remove(randomNum);
-        }
 
-        for (int i=0; i<=duration/10*5 && bucket_high.size() > 0;) {
+            if (bucket_moderate.size() <= 0)
+                break;
 
-            randomNum = ( bucket_high.size() != 1 )
-                    ? ThreadLocalRandom.current().nextInt(0, bucket_high.size()-1)
+            randomNum = (bucket_moderate.size() > 1)
+                    ? ThreadLocalRandom.current().nextInt(0, bucket_moderate.size() - 1)
                     : 0;
 
-            i += bucket_high.get(randomNum).getDuration_ms();
+            i += bucket_moderate.get(randomNum).getDuration_ms();
+        } while (i<=duration/5);
+
+
+        randomNum = 0;
+        i = bucket_high.get(randomNum).getDuration_ms();
+        do { // Add high tempo songs to playlist
             gen_playlist.add(bucket_high.get(randomNum));
 
             bucket_high.remove(randomNum);
-        }
 
-        for (int i=0; i<=duration/10*2 && bucket_moderate.size() > 0;) {
+            if (bucket_high.size() <= 0)
+                break;
 
-            randomNum = ( bucket_moderate.size() != 1 )
-                    ? ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1)
+            randomNum = (bucket_high.size() > 1)
+                    ? ThreadLocalRandom.current().nextInt(0, bucket_high.size() - 1)
                     : 0;
+            i += bucket_high.get(randomNum).getDuration_ms();
+        } while (i<=duration/2);
 
-            i += bucket_moderate.get(randomNum).getDuration_ms();
+
+        randomNum = 0;
+        i = (bucket_moderate.size() > 0) ? bucket_moderate.get(randomNum).getDuration_ms() : -1;
+        do { // Add moderate tempo songs to playlist
+            if (bucket_moderate.size() <= 0)
+                break;
+
             gen_playlist.add(bucket_moderate.get(randomNum));
 
             bucket_moderate.remove(randomNum);
-        }
 
-        for (int i=0; i<=duration/10 && bucket_low.size() > 0;) {
+            if (bucket_moderate.size() <= 0)
+                break;
 
-            randomNum = ( bucket_low.size() != 1 )
-                    ? ThreadLocalRandom.current().nextInt(0, bucket_low.size()-1)
+            randomNum = (bucket_moderate.size() > 1)
+                    ? ThreadLocalRandom.current().nextInt(0, bucket_moderate.size() - 1)
                     : 0;
 
-            i += bucket_low.get(randomNum).getDuration_ms();
+            i += bucket_moderate.get(randomNum).getDuration_ms();
+        } while (i<=duration/5);
+
+
+        randomNum = 0;
+        i = bucket_low.get(randomNum).getDuration_ms();
+        do { // Add low tempo songs to playlist
             gen_playlist.add(bucket_low.get(randomNum));
 
             bucket_low.remove(randomNum);
-        }
+
+            if (bucket_low.size() <= 0)
+                break;
+
+            randomNum = (bucket_low.size() > 1)
+                    ? ThreadLocalRandom.current().nextInt(0, bucket_low.size() - 1)
+                    : 0;
+
+            i += bucket_low.get(randomNum).getDuration_ms();
+        } while (i<=duration/10);
 
         return gen_playlist;
     }

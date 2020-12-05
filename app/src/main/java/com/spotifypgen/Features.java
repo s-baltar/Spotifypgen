@@ -10,7 +10,7 @@ public class Features {
     private double liveness;
     private double valence;
     private double tempo;
-    private double duration_ms;
+    private int duration_ms;
     private String id;
     private String uri;
 
@@ -34,7 +34,7 @@ public class Features {
 
     public double getTempo() { return tempo; }
 
-    public double getDuration_ms() { return duration_ms; }
+    public int getDuration_ms() { return duration_ms; }
 
     public String getId() {
         return id;
