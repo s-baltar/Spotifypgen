@@ -22,7 +22,6 @@ public class Sorting {
     }
 
     private HashMap<Feat, Double> featurePref = new HashMap<Feat, Double>();
-    private ArrayList<Features> features = new ArrayList<>();
 
     public Sorting() {
         featurePref.put(Feat.DANCEABILITY, 0.5);
@@ -53,20 +52,17 @@ public class Sorting {
         return featurePref.get(audioFeature);
     }
 
-    //  Info: Set ArrayList of features that need to be sorted.
-    public void setFeatures(ArrayList<Features> f) {
-        features = f;
-    }
-
 
     //  Info: Filters out songs that exceed a certain 'distance'.
     //        Distributes songs into bucket levels based on the songs tempo.
     //        Randomly picks songs from each bucket without exceeding user's desired playlist
     //        duration.
     //        Minimum amount of songs in the generated playlist is four. One for each 'bucket'.
+    //        List of songs increase and then decrease in tempo.
+    // Param: f - list of songs and their features to be sorted.
     //   Ret: ArrayList of song IDs and features in sorted order to be added to playlist.
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ArrayList<Features> sortBuckets() {
+    public ArrayList<Features> sortFeatures(ArrayList<Features> features) {
 
         ArrayList<Features> bucket = new ArrayList<Features>();
         ArrayList<Features> bucket_high = new ArrayList<Features>();        // High tempo songs
@@ -170,12 +166,4 @@ public class Sorting {
         return gen_playlist;
     }
 
-    //  Info: Sorts songs based on audio features.
-    // Param: f - list of songs and their features to be sorted.
-    //   Ret: List of songs that increase and then decrease in tempo.
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ArrayList<Features> sortFeatures(ArrayList<Features> f) {
-        setFeatures(f);
-        return sortBuckets();
-    }
 }

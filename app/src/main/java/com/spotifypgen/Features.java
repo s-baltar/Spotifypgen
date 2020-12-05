@@ -1,20 +1,18 @@
 package com.spotifypgen;
 
+import java.util.ArrayList;
+
 public class Features {
     private double danceability;
     private double energy;
     private double loudness;
-    private double speechiness;
     private double acousticness;
     private double instrumentalness;
-    private double liveness;
     private double valence;
     private double tempo;
     private int duration_ms;
     private String id;
     private String uri;
-
-    private double distance;
 
     public double getDanceability() { return danceability; }
 
@@ -22,13 +20,9 @@ public class Features {
 
     public double getLoudness() { return loudness; }
 
-    public double getSpeechiness() { return speechiness; }
-
     public double getAcousticness() { return acousticness; }
 
     public double getInstrumentalness() { return instrumentalness; }
-
-    public double getLiveness() { return liveness; }
 
     public double getValence() { return valence; }
 
@@ -44,7 +38,24 @@ public class Features {
         return uri;
     }
 
-    public double getDistance() { return distance; }
+    public void setDanceability(double d) { danceability = d; }
 
-    public void setDistance(double d) { distance = d; }
+    public void setEnergy(double d) { energy = d; }
+
+    public void setLoudness(double d) { loudness = d; }
+
+    public void setAcousticness(double d) { acousticness = d; }
+
+    public void setInstrumentalness(double d) { instrumentalness = d; }
+
+    public void setValence(double d) { valence = d; }
+
+    public void setTempo(double d) { tempo = d; }
+
+    public void setDuration_ms(int i) { duration_ms = i; }
+
+    public void setId(String s) { id = s; }
+
+    public void setURI(String s) {  uri = s; }
+
 }
