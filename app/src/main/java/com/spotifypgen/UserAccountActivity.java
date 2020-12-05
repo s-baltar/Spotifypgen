@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,7 +43,9 @@ public class UserAccountActivity extends AppCompatActivity {
 
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new AccountFragment()).commit();
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(2);
+        menuItem.setChecked(true);
 
         userTextView = (TextView) findViewById(R.id.user);
 
@@ -54,33 +57,24 @@ public class UserAccountActivity extends AppCompatActivity {
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod= new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
 
-            Fragment fragment = null;
-            switch (item.getItemId())
-            {
-                case R.id.home:
-                    fragment = new HomeFragment();
-                    Intent newintent1 = new Intent(UserAccountActivity.this, MainActivity.class);
-                    startActivity(newintent1);
-                    break;
+        switch (item.getItemId())
+        {
+            case R.id.home:
+                Intent newintent1 = new Intent(UserAccountActivity.this, MainActivity.class);
+                startActivity(newintent1);
+                break;
 
-                case R.id.search:
-                    fragment = new SearchFragment();
-                    Intent newintent2 = new Intent(UserAccountActivity.this, SongSearchActivity.class);
-                    startActivity(newintent2);
-                    break;
+            case R.id.search:
+                Intent newintent2 = new Intent(UserAccountActivity.this, SongSearchActivity.class);
+                startActivity(newintent2);
+                break;
 
-                case R.id.account:
-                    fragment = new AccountFragment();
-                    break;
-            }
-            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
-
-            return false;
+            case R.id.account:
+                break;
         }
+        return true;
     };
 
     public void getNumberOfPlaylists() {

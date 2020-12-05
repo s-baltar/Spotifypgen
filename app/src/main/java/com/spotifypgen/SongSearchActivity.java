@@ -3,6 +3,7 @@ package com.spotifypgen;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,21 +44,23 @@ public class SongSearchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_search);
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         currentPlaylist = sharedPreferences.getString("currentPlaylist","");
 
-
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new SearchFragment()).commit();
-
-//        mainBtn = (Button) findViewById(R.id.songMain_button_fp);
-//        mainBtn.setOnClickListener(mainBtnListener);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
+        //getSupportFragmentManager().beginTransaction().replace(R.id.container,new SearchFragment()).commit();
+        //setFragment();
 
         searchCriteria = (EditText) findViewById(R.id.songSearchInput_fp);
+        searchString = searchCriteria.getText().toString();
 
         searchBtn = (Button) findViewById(R.id.songSearchButton_fp);
         searchBtn.setOnClickListener(searchBtnListener);
@@ -74,33 +77,24 @@ public class SongSearchActivity extends AppCompatActivity {
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod= new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
 
-            Fragment fragment = null;
-            switch (item.getItemId())
-            {
-                case R.id.home:
-                    fragment = new HomeFragment();
-                    Intent newintent1 = new Intent(SongSearchActivity.this, MainActivity.class);
-                    startActivity(newintent1);
-                    break;
+        switch (item.getItemId())
+        {
+            case R.id.home:
+                Intent newintent1 = new Intent(SongSearchActivity.this, MainActivity.class);
+                startActivity(newintent1);
+                break;
 
-                case R.id.search:
-                    fragment = new SearchFragment();
-                    break;
+            case R.id.search:
+                break;
 
-                case R.id.account:
-                    fragment = new AccountFragment();
-                    Intent newintent2 = new Intent(SongSearchActivity.this, UserAccountActivity.class);
-                    startActivity(newintent2);
-                    break;
-            }
-            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
-
-            return false;
+            case R.id.account:
+                Intent newintent2 = new Intent(SongSearchActivity.this, UserAccountActivity.class);
+                startActivity(newintent2);
+                break;
         }
+        return true;
     };
 
     private View.OnClickListener saveSongBtnListener = v-> {

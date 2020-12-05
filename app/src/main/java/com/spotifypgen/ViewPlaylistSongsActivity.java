@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -55,7 +56,9 @@ public class ViewPlaylistSongsActivity extends AppCompatActivity {
 //        mainBtn.setOnClickListener(mainBtnListener);
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(false);
 
         displayAllSavePlaylistsBtn = (Button) findViewById(R.id.displayAllPlaylistsBtn);
         displayAllSavePlaylistsBtn.setOnClickListener(displayAllSavePlaylistsBtnListener);
@@ -73,28 +76,23 @@ public class ViewPlaylistSongsActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-            Fragment fragment = null;
             switch (item.getItemId())
             {
                 case R.id.home:
-                    fragment = new HomeFragment();
                     Intent newintent1 = new Intent(ViewPlaylistSongsActivity.this, MainActivity.class);
                     startActivity(newintent1);
                     break;
 
                 case R.id.search:
-                    fragment = new SearchFragment();
                     Intent newintent2 = new Intent(ViewPlaylistSongsActivity.this, SongSearchActivity.class);
                     startActivity(newintent2);
                     break;
 
                 case R.id.account:
-                    fragment = new AccountFragment();
                     Intent newintent3 = new Intent(ViewPlaylistSongsActivity.this, UserAccountActivity.class);
                     startActivity(newintent3);
                     break;
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
 
             return false;
         }
