@@ -140,28 +140,52 @@ public class Sorting {
 
         int randomNum = 0;
 
-        for (int i=0; i<=duration/10*2;) {
-            randomNum = ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1);
+        for (int i=0; i<=duration/10*2 && bucket_moderate.size() > 0;) {
+
+            randomNum = ( bucket_moderate.size() != 1 )
+                    ? ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1)
+                    : 0;
+
             i += bucket_moderate.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_moderate.get(randomNum));
+
+            bucket_moderate.remove(randomNum);
         }
 
-        for (int i=0; i<=duration/10*5;) {
-            randomNum = ThreadLocalRandom.current().nextInt(0, bucket_high.size()-1);
+        for (int i=0; i<=duration/10*5 && bucket_high.size() > 0;) {
+
+            randomNum = ( bucket_high.size() != 1 )
+                    ? ThreadLocalRandom.current().nextInt(0, bucket_high.size()-1)
+                    : 0;
+
             i += bucket_high.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_high.get(randomNum));
+
+            bucket_high.remove(randomNum);
         }
 
-        for (int i=0; i<=duration/10*2;) {
-            randomNum = ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1);
+        for (int i=0; i<=duration/10*2 && bucket_moderate.size() > 0;) {
+
+            randomNum = ( bucket_moderate.size() != 1 )
+                    ? ThreadLocalRandom.current().nextInt(0, bucket_moderate.size()-1)
+                    : 0;
+
             i += bucket_moderate.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_moderate.get(randomNum));
+
+            bucket_moderate.remove(randomNum);
         }
 
-        for (int i=0; i<=duration/10;) {
-            randomNum = ThreadLocalRandom.current().nextInt(0, bucket_low.size()-1);
+        for (int i=0; i<=duration/10 && bucket_low.size() > 0;) {
+
+            randomNum = ( bucket_low.size() != 1 )
+                    ? ThreadLocalRandom.current().nextInt(0, bucket_low.size()-1)
+                    : 0;
+
             i += bucket_low.get(randomNum).getDuration_ms();
             gen_playlist.add(bucket_low.get(randomNum));
+
+            bucket_low.remove(randomNum);
         }
 
         return gen_playlist;
