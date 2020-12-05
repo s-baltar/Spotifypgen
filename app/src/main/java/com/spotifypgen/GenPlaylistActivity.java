@@ -4,19 +4,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,9 +21,6 @@ import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class GenPlaylistActivity extends AppCompatActivity {
-    private SharedPreferences.Editor editor;
-
-    private TextView userView;
     private SongService songService;
     private PlaylistService playlistService;
     private Sorting sorter;
@@ -36,9 +30,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
     private ArrayList<Playlist> playlists = new ArrayList<>();
     private ArrayList<Features> features = new ArrayList<>();
     private ArrayList<Features> genFeats = new ArrayList<>();
-    private Playlist playlist;
-    private String[] inputHeaders = new String[]{"target_acousticness","target_danceability","target_energy",
-            "max_instrumentalness","target_loudness","target_valence"};
+
 
     private Playlist newPlaylist;
     private ArrayList<Artist> artists = new ArrayList<>();
@@ -86,9 +78,6 @@ public class GenPlaylistActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         userID = sharedPreferences.getString("username", "No User");
 
-//        mainBtn = (Button) findViewById(R.id.genPlaylistMain_button);
-//        mainBtn.setOnClickListener(mainBtnListener);
-
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
         Menu menu = bottomNavigationView.getMenu();
@@ -98,14 +87,10 @@ public class GenPlaylistActivity extends AppCompatActivity {
         genBtn = (Button) findViewById(R.id.genPlaylist_button);
         genBtn.setOnClickListener(genBtnListener);
 
-//        nameBtn = (Button) findViewById(R.id.name_button);
-//        nameBtn.setOnClickListener(nameBtnListener);
-
         playlistNameInput = (EditText) findViewById(R.id.playlistNameInput);
 
         acousticness_seekbar = (SeekBar) findViewById(R.id.acousticness_seekbar);
         acousticness_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            int currentProgress = 50;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
@@ -248,19 +233,6 @@ public class GenPlaylistActivity extends AppCompatActivity {
         Intent newintent = new Intent(GenPlaylistActivity.this, MainActivity.class);
         startActivity(newintent);
     };
-
-
-    // creates empty playlist w specified name
-//    private View.OnClickListener nameBtnListener = v -> {
-//        String playlistNameInput_string = playlistNameInput.getText().toString();
-//
-//        if (playlistNameInput_string.isEmpty())
-//            playlistNameInput_string = "Generated Playlist";
-//
-//        newPlaylist = playlistService.createPlaylist(userID , playlistNameInput_string);
-//        newPlaylistCreated = true;
-//    };
-
 
 
     private View.OnClickListener genBtnListener = v -> {

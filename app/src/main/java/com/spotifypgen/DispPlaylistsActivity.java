@@ -22,13 +22,10 @@ import java.util.ArrayList;
 
 public class DispPlaylistsActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
-    private Button mainBtn;
     private Button editPlaylistBtn;
     private Button deletePlaylistBtn;
     private Button addSongsBtn;
-    private Playlist playlist;
     private ListView playlistLView;
-    //private TextView playlistView;
     private User user;
     private ArrayList<Playlist> playlists = new ArrayList<>();
     public ArrayList<String> playlistTitles = new ArrayList<>();
@@ -47,9 +44,6 @@ public class DispPlaylistsActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         currentSong = sharedPreferences.getString("currentSong","");
         currentPlaylist = sharedPreferences.getString("currentPlaylist","");
-
-//        mainBtn = (Button) findViewById(R.id.dispPlaylistsMain_button);
-//        mainBtn.setOnClickListener(mainBtnListener);
 
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);

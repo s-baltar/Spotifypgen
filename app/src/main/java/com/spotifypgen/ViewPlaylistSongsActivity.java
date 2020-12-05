@@ -115,7 +115,7 @@ public class ViewPlaylistSongsActivity extends AppCompatActivity {
 
     private void displayTracks(){
         songService.getPlaylistItems(()->{
-            trackTitles = songService.getTrackArtists();
+            trackTitles = songService.getTrackTitles();
             tracksListView = (ListView) findViewById(R.id.tracksListView);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_song_listview,R.id.songLabel, trackTitles);
             tracksListView.setAdapter(adapter);

@@ -3,6 +3,8 @@ package com.spotifypgen;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -36,7 +38,6 @@ public class PlaylistServiceTest {
     public void getPlaylist() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         SharedPreferences sharedPreferences = appContext.getSharedPreferences("SPOTIFY", 0);
-
         PlaylistService playlistService = new PlaylistService(appContext.getApplicationContext());
 
 
@@ -44,6 +45,13 @@ public class PlaylistServiceTest {
 
     @Test
     public void createPlaylist() {
+        String playlistName = "Test Playlist";
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        PlaylistService playlistService = new PlaylistService(appContext.getApplicationContext());
+        playlistService.createPlaylist(() -> {
+            Playlist emptyPlaylist = playlistService.getPlaylist();
+            assertEquals("Test Playlist", emptyPlaylist.getName());
+        }, "okuninaka", playlistName);
     }
 
     @Test
@@ -56,5 +64,18 @@ public class PlaylistServiceTest {
 
     @Test
     public void addSongToPlaylist() {
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        PlaylistService playlistService = new PlaylistService(appContext.getApplicationContext());
+        SongService songService = new SongService(appContext.getApplicationContext());
+
+        playlistService.createPlaylist(() -> {
+            Playlist newPlaylist = playlistService.getPlaylist();
+            playlistService.addSongToPlaylist("003vvx7Niy0yvhvHt4a68B",newPlaylist.getId());
+            songService.getPlaylistItems(() -> {
+                String trackTitle = songService.getTrackTitles().get(0);
+                assertEquals("Mr. Brightside", trackTitle);
+                },newPlaylist.getId());
+        }, "okuninaka", "test playlist");
+
     }
 }

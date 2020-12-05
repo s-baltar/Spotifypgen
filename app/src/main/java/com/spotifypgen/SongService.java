@@ -24,11 +24,9 @@ import java.util.Map;
 
 public class SongService {
     private ArrayList<Song> songs = new ArrayList<>();
-    private ArrayList<String> songsStr = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
     private Song song;
-    private String songStr;
 
     private ArrayList<Artist> artists = new ArrayList<>();
     private Artist artist;
@@ -161,7 +159,6 @@ public class SongService {
         return ids;
     }
 
-
     //  search song by track name
     public ArrayList<Song> songSearch(final VolleyCallBack callBack,String searchCriteria) {
         String endpoint = "https://api.spotify.com/v1/search?q="+searchCriteria+"&type=track&market=US";
@@ -198,7 +195,6 @@ public class SongService {
         queue.add(jsonObjectRequest);
         return songs;
     }
-
 
     public ArrayList<Artist> getArtists() {
         return artists;
@@ -455,7 +451,7 @@ public class SongService {
         queue.add(jsonObjectRequest);
         return trackTitles;
     }
-    public ArrayList<String> getTrackArtists() {
+    public ArrayList<String> getTrackTitles() {
         return trackTitles;
     }
 }

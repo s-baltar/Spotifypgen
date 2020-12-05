@@ -30,11 +30,25 @@ public class SongServiceTest {
 
     @Test
     public void addSongToLibrary() {
+        SongService songService = new SongService(getApplicationContext());
+        Song song = new Song("3n3Ppam7vgaVa1iaRUc9Lp","Mr. Brightside");
+        songService.addSongToLibrary(song);
+        songService.getSavedTracks(() -> {
+            Song songResult = songService.getSongs().get(0);
+            assertEquals("Mr. Brightside",songResult.getName());
+            assertEquals("3n3Ppam7vgaVa1iaRUc9Lp",songResult.getId());
+        },0,1);
     }
 
     @Test
     public void songSearch() {
-
+        SongService songService = new SongService(getApplicationContext());
+        songService.songSearch( ()-> {
+            ArrayList<Song> tracks;
+            tracks = songService.getSongs();
+            assertNotNull("Error in getting search songs", tracks);
+            assertNotNull("Error in getting song",              tracks.get(0));
+        }, "s");
     }
 
     @Test

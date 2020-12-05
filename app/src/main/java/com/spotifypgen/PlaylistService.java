@@ -173,28 +173,4 @@ public class PlaylistService {
         };
     }
 
-
-
-//    public void addSongToPlaylist(String songURI_id, String playlistURI) {
-//        String endpoint = "https://api.spotify.com/v1/playlists/3cEYpjA9oz9GiPac4AsH4n/tracks?uris=spotify%3Atrack%3A4iV5W9uYEdYUVa79Axb7Rh%2Cspotify%3Atrack%3A1301WleyT98MSxVHPZCA6M";
-////        playlist = new Playlist();
-//        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
-//                Request.Method.POST, endpoint, payload, response -> {
-//            Gson gson = new Gson();
-//            playlist = gson.fromJson(response.toString(),Playlist.class);
-//        }, error -> {
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> headers = new HashMap<>();
-//                String token = sharedPreferences.getString("token", "");
-//                String auth = "Bearer " + token;
-//                headers.put("Authorization", auth);
-//                headers.put("Content-Type", "application/json");
-//                return headers;
-//            }
-//        };
-//        queue.add(jsonObjectRequest);
-//        return playlist;
-//    }
 }
