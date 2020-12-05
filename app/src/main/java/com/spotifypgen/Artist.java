@@ -30,4 +30,8 @@ public class Artist {
         this.name = name;
     }
 
+    public void setURI(String u) {
+        this.uri = u;
+    }
+
 }
