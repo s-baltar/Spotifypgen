@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import androidx.annotation.ContentView;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Test;
@@ -31,6 +32,11 @@ public class SplashActivityTest {
         SharedPreferences sharedPreferences = appContext.getSharedPreferences("SPOTIFY", 0);
         assertEquals("22ou7gy74om4mnrgfmb3puqqq", sharedPreferences.getString("userid",""));
         assertEquals("Gloraay", sharedPreferences.getString("username",""));
+
+    }
+
+    @Test
+    public void testChangeText_sameActivity() {
 
     }
 }
