@@ -42,12 +42,17 @@ public class SplashActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_splash);
 
-
         authenticateSpotify();
 
         msharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         queue = Volley.newRequestQueue(this);
     }
+
+    /*
+        REQUIRED
+        - method requests a token from spotify using user's spotify account
+        - method authenticates the app for user account modification and access
+     */
     private void authenticateSpotify() {
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
         builder.setScopes(new String[]{SCOPES});
@@ -79,11 +84,15 @@ public class SplashActivity extends AppCompatActivity {
                 // Auth flow returned an error
                 case ERROR:
                     // Handle error response
+                    Intent newintent = new Intent(SplashActivity.this, SplashActivity.class);
+                    startActivity(newintent);
                     break;
 
                 // Most likely auth flow was cancelled
                 default:
                     // Handle other cases
+                    Intent newintent1 = new Intent(SplashActivity.this, SplashActivity.class);
+                    startActivity(newintent1);
             }
         }
     }

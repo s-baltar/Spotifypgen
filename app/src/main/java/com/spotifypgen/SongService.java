@@ -2,7 +2,6 @@ package com.spotifypgen;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -15,8 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,9 +24,12 @@ public class SongService {
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
     private Song song;
+    private ArrayList<String> uris;
 
     private ArrayList<Artist> artists = new ArrayList<>();
     private Artist artist;
+    private ArrayList<Song> tracks = new ArrayList<>();
+    private Song track;
 
     private ArrayList<Features> features = new ArrayList<>();
     ArrayList <String> trackTitles = new ArrayList<>();
@@ -41,10 +41,11 @@ public class SongService {
 
     public ArrayList<Song> getSongs() { return songs; }
 
+
     public ArrayList<Features> getTrackFeatures() { return features; }
 
     // returns array of user's recently played songs
-    public ArrayList<Song> getRecentlyPlayedTracks(final VolleyCallBack callBack) {
+    public void getRecentlyPlayedTracks(final VolleyCallBack callBack) {
         String endpoint = "https://api.spotify.com/v1/me/player/recently-played";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -74,11 +75,10 @@ public class SongService {
             }
         };
         queue.add(jsonObjectRequest);
-        return songs;
     }
 
     // returns array of user's saved (liked) songs
-    public ArrayList<Song> getSavedTracks(final VolleyCallBack callBack, int offset, int limit) {
+    public void getSavedTracks(final VolleyCallBack callBack, int offset, int limit) {
         String endpoint = "https://api.spotify.com/v1/me/tracks?offset=" + String.valueOf(offset) +
                 "&limit=" + String.valueOf(limit);
 
@@ -110,17 +110,15 @@ public class SongService {
         };
         queue.add(jsonObjectRequest);
 
-        return songs;
     }
 
     //  Info: Only gets 1000 most recently saved songs.
-    public ArrayList<Song> getAllSavedTracks(final VolleyCallBack callBack) {
+    public void getAllSavedTracks(final VolleyCallBack callBack) {
         for (int i=0; i<1000; i+=20) {
             getSavedTracks( ()-> {
             }, i, 20);
         }
         callBack.onSuccess();
-        return songs;
     }
 
     // add song to saved songs
@@ -136,7 +134,7 @@ public class SongService {
         }, error -> {
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -160,13 +158,13 @@ public class SongService {
     }
 
     //  search song by track name
-    public ArrayList<Song> songSearch(final VolleyCallBack callBack,String searchCriteria) {
+    public void songSearch(final VolleyCallBack callBack, String searchCriteria) {
         String endpoint = "https://api.spotify.com/v1/search?q="+searchCriteria+"&type=track&market=US";
         songs.clear();
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
                 Request.Method.GET, endpoint, null, response -> {
             Gson gson = new Gson();
-            JSONObject object = response.optJSONObject("tracks");
+            JSONObject object = response.optJSONObject("items");
             JSONArray jsonArray = object.optJSONArray("items");
             for (int n = 0; n < jsonArray.length(); n++) {
                 try {
@@ -182,7 +180,7 @@ public class SongService {
         }, error -> {
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -193,7 +191,6 @@ public class SongService {
             }
         };
         queue.add(jsonObjectRequest);
-        return songs;
     }
 
     public ArrayList<Artist> getArtists() {
@@ -201,7 +198,7 @@ public class SongService {
     }
 
     // get user's top 5 artists
-    public ArrayList<Artist> getTopArtists(final VolleyCallBack callBack) {
+    public void getTopArtists(final VolleyCallBack callBack) {
         String endpoint = "https://api.spotify.com/v1/me/top/artists?limit=5";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -221,7 +218,7 @@ public class SongService {
         }, error -> {
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -230,12 +227,45 @@ public class SongService {
             }
         };
         queue.add(jsonObjectRequest);
+    }
 
-        return artists;
+    public ArrayList<String> getURIS() { return uris; }
+
+    // get user's top 5 tracks
+    public void getTopTracks(final VolleyCallBack callBack) {
+        String endpoint = "https://api.spotify.com/v1/me/top/tracks?limit=5";
+
+        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
+                Request.Method.GET, endpoint, null, response -> {
+            Gson gson = new Gson();
+            JSONArray jsonArray = response.optJSONArray("items");
+            for (int n = 0; n < jsonArray.length(); n++) {
+                try {
+                    JSONObject obj = jsonArray.getJSONObject(n);
+                    song = gson.fromJson(obj.toString(), Song.class);
+                    songs.add(song);
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            callBack.onSuccess();
+        }, error -> {
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
     }
 
 
-    public ArrayList<Song> songSeedSearch(final VolleyCallBack callBack, ArrayList<Artist> topArtists, ArrayList<Double> specs) {
+    public void songSeedSearch(final VolleyCallBack callBack, ArrayList<Artist> topArtists, ArrayList<Double> specs) {
         String[] artistURI = new String[5];
         for (int i = 0; i < 5; i++) {
             String[] splitArtistString = topArtists.get(i).getURI().split("artist:");
@@ -274,7 +304,7 @@ public class SongService {
         }, error -> {
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -283,7 +313,6 @@ public class SongService {
             }
         };
         queue.add(jsonObjectRequest);
-        return songs;
     }
 
     //  Info: Get song IDs of 100 or less tracks
@@ -306,7 +335,7 @@ public class SongService {
     //        Can only query features for 100 songs at a time.
     // Param: endpoint
     //   Ret: ArrayList of Features
-    private ArrayList<Features> getFeatures(final VolleyCallBackFeatList callBack, String endpoint) {
+    private void getFeatures(final VolleyCallBackFeatList callBack, String endpoint) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, endpoint, null, response -> {
                     Gson gson = new Gson();
@@ -325,7 +354,7 @@ public class SongService {
                 }, error -> {
                 }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -335,14 +364,13 @@ public class SongService {
         };
         queue.add(jsonObjectRequest);
 
-        return features;
     }
 
 
     //  Info: Get audio features for given songs.
     // Param: tracks - ArrayList of Songs.
     //   Ret: ArrayList of Song
-    public ArrayList<Features> getAudioFeatures(final VolleyCallBackFeatList callBack, ArrayList<Song> tracks) {
+    public void getAudioFeatures(final VolleyCallBackFeatList callBack, ArrayList<Song> tracks) {
         int offset = 0;
 
         while ( offset < tracks.size() ) {
@@ -357,7 +385,6 @@ public class SongService {
             offset += 100;
         }
 
-        return features;
     }
 
     // requests to delete a track from the user's library using the DELETE method
@@ -370,7 +397,7 @@ public class SongService {
         }, error -> {
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -387,12 +414,12 @@ public class SongService {
     // the Spotify API uses the unfollow feature to achieve this
     public void deleteTracks(ArrayList<String> songURIs) {
 
-        String songs = new String();
+        StringBuilder songs = new StringBuilder();
 
-        songs = songs + songURIs.get(0);
+        songs.append(songURIs.get(0));
 
         for (int i = 1; i < songURIs.size(); i++) {
-            songs = songs + "," + songURIs.get(i);
+            songs.append(",").append(songURIs.get(i));
         }
 
         String endpoint = "https://api.spotify.com/me/tracks?/ids="+songs;
@@ -402,7 +429,7 @@ public class SongService {
         }, error -> {
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -415,7 +442,7 @@ public class SongService {
         queue.add(jsonObjectRequest);
     }
 
-    public ArrayList<String> getPlaylistItems(final VolleyCallBack callBack, String playlistID) {
+    public void getPlaylistItems(final VolleyCallBack callBack, String playlistID) {
 
         String endpoint = "https://api.spotify.com/v1/playlists/"+playlistID+"/tracks?fields=items(track(name%2Curi%2Cid))";
 
@@ -438,7 +465,7 @@ public class SongService {
         }, error -> {
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -449,7 +476,6 @@ public class SongService {
             }
         };
         queue.add(jsonObjectRequest);
-        return trackTitles;
     }
     public ArrayList<String> getTrackTitles() {
         return trackTitles;

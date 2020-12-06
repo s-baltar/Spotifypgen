@@ -42,6 +42,7 @@ public class DispPlaylistsActivity extends AppCompatActivity {
         onCreate
         -> display navigation bar
         -> set menu.Item to false (do not highlight any of the menu options
+        -> display list of user playlists
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class DispPlaylistsActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         currentSong = sharedPreferences.getString("currentSong","");
-        String currentPlaylist = sharedPreferences.getString("currentPlaylist", "");
+        //sharedPreferences.getString("currentPlaylist", "");
 
 
         // get bottom navigation from activity_disp_playlists
@@ -97,12 +98,12 @@ public class DispPlaylistsActivity extends AppCompatActivity {
                 startActivity(newintent1);
                 break;
 
-            case R.id.search: // create new intent to switch to MainActivity if search is selected
+            case R.id.search: // create new intent to switch to SongSearchActivity if search is selected
                 Intent newintent2 = new Intent(DispPlaylistsActivity.this, SongSearchActivity.class);
                 startActivity(newintent2);
                 break;
 
-            case R.id.account: // create new intent to switch to MainActivity if account is selected
+            case R.id.account: // create new intent to switch to UserAccountActivity if account is selected
                 Intent newintent3 = new Intent(DispPlaylistsActivity.this, UserAccountActivity.class);
                 startActivity(newintent3);
                 break;

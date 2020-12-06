@@ -1,5 +1,9 @@
 package com.spotifypgen;
 
+/*
+    This is the Song class
+    Class stores a track's id, name and uri
+ */
 public class Song {
     private String id;
     private String uri;
@@ -10,6 +14,7 @@ public class Song {
         this.id = id;
     }
 
+    // getter and setter method
     public String getId() {
         return id;
     }

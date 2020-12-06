@@ -10,6 +10,9 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
 
+    /*
+        This service provides method to retrieve a users information
+     */
 public class UserService {
     private static final String ENDPOINT = "https://api.spotify.com/v1/me";
     private SharedPreferences msharedPreferences;
@@ -25,6 +28,10 @@ public class UserService {
         return user;
     }
 
+    /*
+        request user info using ENDPOINT
+        stores call results to user variable
+     */
     public void get(final VolleyCallBack callBack) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(ENDPOINT, null, response -> {
             Gson gson = new Gson();

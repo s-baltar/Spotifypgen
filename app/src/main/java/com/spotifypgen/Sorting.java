@@ -21,7 +21,7 @@ public class Sorting {
         LENGTH
     }
 
-    private HashMap<Feat, Double> featurePref = new HashMap<Feat, Double>();
+    private final HashMap<Feat, Double> featurePref = new HashMap<Feat, Double>();
 
     public Sorting() {
         featurePref.put(Feat.DANCEABILITY, 0.5);
@@ -64,7 +64,7 @@ public class Sorting {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public ArrayList<Features> sortFeatures(ArrayList<Features> features) {
 
-        ArrayList<Features> bucket = new ArrayList<Features>();
+        ArrayList<Features> bucket;
         ArrayList<Features> bucket_high = new ArrayList<Features>();        // High tempo songs
         ArrayList<Features> bucket_moderate = new ArrayList<Features>();    // Moderate tempo songs
         ArrayList<Features> bucket_low = new ArrayList<Features>();         // Low tempo songs

@@ -1,5 +1,9 @@
 package com.spotifypgen;
 
+/*
+    Activity enables user to search for tacks by keywords
+ */
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,25 +24,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
+
+
 public class SongSearchActivity extends AppCompatActivity {
-    private SharedPreferences.Editor editor;
-    private Button mainBtn;
-    private Button searchBtn;
-    private Button addToPlaylistBtn;
-    private Button saveSongBtn;
     public String searchString;
     private EditText searchCriteria;
-    private Song song;
+    //private Song song;
     private SongService songService;
     private PlaylistService playlistService;
-    private Playlist playlist;
-    private ArrayList<Playlist> playlists = new ArrayList<>();
-    private ArrayList<Song> tracks = new ArrayList<>();; // Recently played tracks or user's saved tracks
+    //private Playlist playlist;
+    //private ArrayList<Playlist> playlists = new ArrayList<>();
+    private ArrayList<Song> tracks = new ArrayList<>();; // stores recently played tracks or user's saved tracks
     public ArrayList<String> songTitles = new ArrayList<>();
     private ListView listView;
     private String currentPlaylist;
     private int itemPosition; // position of item on ListView
-    private BottomNavigationView bottomNavigationView;
     private ArrayAdapter<String> adapter;
 
 
@@ -51,24 +51,22 @@ public class SongSearchActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         currentPlaylist = sharedPreferences.getString("currentPlaylist","");
 
-        bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNev);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
-        //getSupportFragmentManager().beginTransaction().replace(R.id.container,new SearchFragment()).commit();
-        //setFragment();
 
         searchCriteria = (EditText) findViewById(R.id.songSearchInput_fp);
         searchString = searchCriteria.getText().toString();
 
-        searchBtn = (Button) findViewById(R.id.songSearchButton_fp);
+        Button searchBtn = (Button) findViewById(R.id.songSearchButton_fp);
         searchBtn.setOnClickListener(searchBtnListener);
 
-        saveSongBtn = (Button) findViewById(R.id.saveSong_button);
+        Button saveSongBtn = (Button) findViewById(R.id.saveSong_button);
         saveSongBtn.setOnClickListener(saveSongBtnListener);
 
-        addToPlaylistBtn = (Button) findViewById(R.id.addToPlaylist_button_fp);
+        Button addToPlaylistBtn = (Button) findViewById(R.id.addToPlaylist_button_fp);
         addToPlaylistBtn.setOnClickListener(addToPlaylistBtnListener);
 
         songService = new SongService(getApplicationContext());
@@ -77,19 +75,23 @@ public class SongSearchActivity extends AppCompatActivity {
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
+    /*
+        this listener switches activities  by creating a new Intent
+     */
+    @SuppressLint("NonConstantResourceId")
+    private final BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
 
         switch (item.getItemId())
         {
-            case R.id.home:
+            case R.id.home: // create new intent to switch to MainActivity if home is selected
                 Intent newintent1 = new Intent(SongSearchActivity.this, MainActivity.class);
                 startActivity(newintent1);
                 break;
 
-            case R.id.search:
+            case R.id.search: // do nothing if second icon is clicked
                 break;
 
-            case R.id.account:
+            case R.id.account: // create new intent to switch to UserAccountActivity if home is selected
                 Intent newintent2 = new Intent(SongSearchActivity.this, UserAccountActivity.class);
                 startActivity(newintent2);
                 break;
@@ -97,23 +99,14 @@ public class SongSearchActivity extends AppCompatActivity {
         return true;
     };
 
-    private View.OnClickListener saveSongBtnListener = v-> {
+    private final View.OnClickListener saveSongBtnListener = v-> {
         songService.addSongToLibrary(tracks.get(itemPosition));
     };
 
-    private View.OnClickListener mainBtnListener = v -> {
-        Intent newintent = new Intent(SongSearchActivity.this, MainActivity.class);
-        startActivity(newintent);
-    };
-
-    private View.OnClickListener addToPlaylistBtnListener = v -> {
+    private final View.OnClickListener addToPlaylistBtnListener = v -> {
 
         if ( currentPlaylist.equals("")) {
-//            playlistService.getUserPlaylists(()->{
-//                playlists = playlistService.getPlaylists();
-//                playlistService.addSongToPlaylist(tracks.get(itemPosition).getURI(),playlists.get(0).getId());
-//            });
-            editor = getSharedPreferences("SPOTIFY", 0).edit();
+            SharedPreferences.Editor editor = getSharedPreferences("SPOTIFY", 0).edit();
             editor.putString("currentSong", tracks.get(itemPosition).getURI());
             editor.apply();
 
@@ -121,34 +114,25 @@ public class SongSearchActivity extends AppCompatActivity {
             startActivity(newintent);
         }
         else {
-//            editor.putString("currentPlaylist", currentPlaylist);
             playlistService.addSongToPlaylist(tracks.get(itemPosition).getURI(),currentPlaylist);
             Intent newintent = new Intent(SongSearchActivity.this, ViewPlaylistSongsActivity.class);
             startActivity(newintent);
         }
 
-//        editor = getSharedPreferences("SPOTIFY", 0).edit();
-//        editor.putString("currentSong", tracks.get(itemPosition).getURI());
-//        editor.apply();
-//
-//        Intent newintent = new Intent(SongSearchActivity.this, DispPlaylistsActivity.class);
-//        startActivity(newintent);
-
     };
 
-    private View.OnClickListener searchBtnListener = v -> {
-
+    // method gets entered string and calls dispSearch method
+    private final View.OnClickListener searchBtnListener = v -> {
         searchString = searchCriteria.getText().toString();
         dispSearch();
 
     };
 
-    private void updateSong() {
-        songTitles = new ArrayList<>();
-        for (int i = 0; i < tracks.size(); i++) {
-            songTitles.add(tracks.get(i).getName());
-        }
-    }
+    /*
+        Main method of Activity
+        - method performs a search with user's string by calling  the song service method songSearch
+        - method returns nothing but populates the list view with search results from songSearch
+     */
     private void dispSearch() {
         songService.songSearch(() -> {
             songTitles.clear();
@@ -162,10 +146,8 @@ public class SongSearchActivity extends AppCompatActivity {
         }, searchString);
     }
 
+    // activate listener and assign selected item to variable itemPosition
     private void activateListViewClickListener(){
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                itemPosition = position;
-            }});
+        listView.setOnItemClickListener((parent, view, position, id) -> itemPosition = position);
     }
 }
