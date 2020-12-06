@@ -32,15 +32,10 @@ public class GenPlaylistActivity extends AppCompatActivity {
     private Sorting sorter;
     private EditText playlistNameInput;
     private ArrayList<Song> tracks = new ArrayList<>();
-    //private ArrayList<Song> allTracks = new ArrayList<>();
-    //private ArrayList<Playlist> playlists = new ArrayList<>();
     private ArrayList<Features> features = new ArrayList<>();
     private ArrayList<Features> genFeats = new ArrayList<>();
-
-
     private Playlist newPlaylist;
     private ArrayList<Artist> artists = new ArrayList<>();
-
     private BottomNavigationView bottomNavigationView;
     /*
     Store seekbar values

@@ -1,7 +1,5 @@
 package com.spotifypgen;
 
-import java.util.ArrayList;
-
 public class Features {
     private double danceability;
     private double energy;

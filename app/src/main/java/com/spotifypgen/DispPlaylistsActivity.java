@@ -29,7 +29,7 @@ public class DispPlaylistsActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private ListView playlistLView;
     private ArrayList<Playlist> playlists = new ArrayList<>();
-    public ArrayList<String> playlistTitles = new ArrayList<>();
+    private ArrayList<String> playlistTitles = new ArrayList<>();
     private PlaylistService playlistService;
     private String currentSong;
 

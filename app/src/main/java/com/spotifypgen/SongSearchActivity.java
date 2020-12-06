@@ -29,11 +29,8 @@ import java.util.ArrayList;
 public class SongSearchActivity extends AppCompatActivity {
     public String searchString;
     private EditText searchCriteria;
-    //private Song song;
     private SongService songService;
     private PlaylistService playlistService;
-    //private Playlist playlist;
-    //private ArrayList<Playlist> playlists = new ArrayList<>();
     private ArrayList<Song> tracks = new ArrayList<>();; // stores recently played tracks or user's saved tracks
     public ArrayList<String> songTitles = new ArrayList<>();
     private ListView listView;
