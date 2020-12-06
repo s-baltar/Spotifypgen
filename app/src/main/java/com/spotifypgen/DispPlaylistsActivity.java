@@ -1,5 +1,6 @@
 package com.spotifypgen;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,17 +8,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -30,20 +27,16 @@ import java.util.ArrayList;
 
 public class DispPlaylistsActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
-    private Button editPlaylistBtn;
-    private Button deletePlaylistBtn;
-    private Button addSongsBtn;
     private ListView playlistLView;
-    //private User user;
     private ArrayList<Playlist> playlists = new ArrayList<>();
     public ArrayList<String> playlistTitles = new ArrayList<>();
     private PlaylistService playlistService;
     private String currentSong;
-    private String currentPlaylist;
-    private BottomNavigationView bottomNavigationView;
-    private Button confirmationBtn;
 
     int itemPosition;
+
+    public DispPlaylistsActivity() {
+    }
 
     /*
         onCreate
@@ -58,11 +51,11 @@ public class DispPlaylistsActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         currentSong = sharedPreferences.getString("currentSong","");
-        currentPlaylist = sharedPreferences.getString("currentPlaylist","");
+        String currentPlaylist = sharedPreferences.getString("currentPlaylist", "");
 
 
         // get bottom navigation from activity_disp_playlists
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNev);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNev);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
 
         // find and unhighlight first menu item
@@ -74,13 +67,13 @@ public class DispPlaylistsActivity extends AppCompatActivity {
         /*
             get edit, addSongs and deletePlaylist buttons and create listeners for them
          */
-        editPlaylistBtn = (Button) findViewById(R.id.editPlaylist_button);
+        Button editPlaylistBtn = (Button) findViewById(R.id.editPlaylist_button);
         editPlaylistBtn.setOnClickListener(editPlaylistBtnListener);
 
-        addSongsBtn = (Button) findViewById(R.id.addSongstoPlaylist_button);
+        Button addSongsBtn = (Button) findViewById(R.id.addSongstoPlaylist_button);
         addSongsBtn.setOnClickListener(addSongsBtnListner);
 
-        deletePlaylistBtn = (Button) findViewById(R.id.deletePlaylistBtn) ;
+        Button deletePlaylistBtn = (Button) findViewById(R.id.deletePlaylistBtn);
         deletePlaylistBtn.setOnClickListener(deletePlaylistBtnListener);
 
         // instantiate a new playlist service
@@ -94,7 +87,8 @@ public class DispPlaylistsActivity extends AppCompatActivity {
     /*
         this listener switches activities  by creating a new Intent
      */
-    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod= item -> {
+    @SuppressLint("NonConstantResourceId")
+    private final BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod= item -> {
 
         switch (item.getItemId())
         {
@@ -122,7 +116,7 @@ public class DispPlaylistsActivity extends AppCompatActivity {
         selected playlist's name and id and then starts new Intent of class ViewPlaylistSongsActivity
      */
 
-    private View.OnClickListener editPlaylistBtnListener = v -> {
+    private final View.OnClickListener editPlaylistBtnListener = v -> {
 
         editor = getSharedPreferences("SPOTIFY", 0).edit();
         editor.putString("currentPlaylist", playlists.get(itemPosition).getId());
@@ -137,7 +131,7 @@ public class DispPlaylistsActivity extends AppCompatActivity {
         listener uses itemPosition variable to call the Playlist Service deletePlaylist method
         to delete the selected playlist
      */
-    private View.OnClickListener deletePlaylistBtnListener = v -> {
+    private final View.OnClickListener deletePlaylistBtnListener = v -> {
 
         // Prompt user to confirm that they want to delete the selected playlist
         AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(DispPlaylistsActivity.this);
@@ -157,17 +151,14 @@ public class DispPlaylistsActivity extends AppCompatActivity {
             }
         });
 
-        myAlertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do nothing if user says clicks on no on the dialog box
-            }
+        myAlertBuilder.setNegativeButton("No", (dialog, which) -> {
+            // Do nothing if user says clicks on no on the dialog box
         });
         myAlertBuilder.show();
 
     };
 
-    private View.OnClickListener addSongsBtnListner = v -> {
+    private final View.OnClickListener addSongsBtnListner = v -> {
 
         /*
             if - no song URI has been stored in sharedPreferences under currentSong then store the
@@ -202,6 +193,11 @@ public class DispPlaylistsActivity extends AppCompatActivity {
 
     };
 
+    /*
+        gets the user's playlists and assigns them to variable playlists
+        calls updatePlaylist method
+        displays contents of playListTitles to ListView
+     */
     public void displayPlaylists() {
         playlistService.getUserPlaylists(() -> {
             playlists = playlistService.getPlaylists();
@@ -213,12 +209,14 @@ public class DispPlaylistsActivity extends AppCompatActivity {
         });
     }
 
+    // populates the array playListTitles with the names of the returned playlists
     private void updatePlaylist() {
         for (int i = 0; i < playlists.size(); i++) {
             playlistTitles.add(this.playlists.get(i).getName());
         }
     }
 
+    // activate listener and assign selected item to variable itemPosition
     private void activateListViewClickListener(){
         playlistLView.setOnItemClickListener((parent, view, position, id) -> itemPosition = position);
     }

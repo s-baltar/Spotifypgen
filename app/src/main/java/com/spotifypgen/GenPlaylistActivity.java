@@ -19,6 +19,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
+/*
+    Main Activity of app
+    This activity gives the user the ability to create a unique playlist using the values the pass
+    to the generator
+ */
+
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class GenPlaylistActivity extends AppCompatActivity {
     private SongService songService;
@@ -26,8 +32,8 @@ public class GenPlaylistActivity extends AppCompatActivity {
     private Sorting sorter;
     private EditText playlistNameInput;
     private ArrayList<Song> tracks = new ArrayList<>();
-    private ArrayList<Song> allTracks = new ArrayList<>();
-    private ArrayList<Playlist> playlists = new ArrayList<>();
+    //private ArrayList<Song> allTracks = new ArrayList<>();
+    //private ArrayList<Playlist> playlists = new ArrayList<>();
     private ArrayList<Features> features = new ArrayList<>();
     private ArrayList<Features> genFeats = new ArrayList<>();
 
@@ -89,11 +95,16 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
         playlistNameInput = (EditText) findViewById(R.id.playlistNameInput);
 
+        /*
+            seekBar methods
+            methods only override the onStopTrackingTouch method where the generator stores
+            the value of the seekbar
+         */
         acousticness_seekbar = (SeekBar) findViewById(R.id.acousticness_seekbar);
         acousticness_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                // do nothing wh
             }
 
             @Override
@@ -202,36 +213,32 @@ public class GenPlaylistActivity extends AppCompatActivity {
 
     }
 
+    /*
+        this listener switches activities  by creating a new Intent
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod= new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
             switch (item.getItemId())
             {
-                case R.id.home:
+                case R.id.home: // create new intent to switch to MainActivity if home is selected
                     Intent newintent1 = new Intent(GenPlaylistActivity.this, MainActivity.class);
                     startActivity(newintent1);
                     break;
 
-                case R.id.search:
+                case R.id.search: // create new intent to switch to MainActivity if search is selected
                     Intent newintent2 = new Intent(GenPlaylistActivity.this, SongSearchActivity.class);
                     startActivity(newintent2);
                     break;
 
-                case R.id.account:
+                case R.id.account: // create new intent to switch to MainActivity if account is selected
                     Intent newintent3 = new Intent(GenPlaylistActivity.this, UserAccountActivity.class);
                     startActivity(newintent3);
                     break;
             }
-
-
             return false;
         }
-    };
-
-    private View.OnClickListener mainBtnListener = v -> {
-        Intent newintent = new Intent(GenPlaylistActivity.this, MainActivity.class);
-        startActivity(newintent);
     };
 
 
@@ -239,7 +246,12 @@ public class GenPlaylistActivity extends AppCompatActivity {
         generatePlaylist();
     };
 
-    // adds songs to newly created playlist w seed search func
+    /*
+        Main method of class
+        - method gets user's entered playlist name
+        - if none is specified, "Generated Playlist" is used
+        -
+     */
     private void generatePlaylist() {
         String playlistNameInput_string = playlistNameInput.getText().toString();
 
@@ -255,11 +267,14 @@ public class GenPlaylistActivity extends AppCompatActivity {
                 lengthOfPlaylist = Integer.parseInt(lengthString);
                 sorter.setFeaturePreferences(Sorting.Feat.LENGTH, (double)lengthOfPlaylist);
             }
+
             getSeekbarValues();
+
             if (newPlaylist != null) {
                 getSeedSearchResults();
             }
 
+            // display user playlists once done
             Intent newintent = new Intent(GenPlaylistActivity.this, DispPlaylistsActivity.class);
             startActivity(newintent);
             }, userID, playlistNameInput_string);
@@ -311,16 +326,6 @@ public class GenPlaylistActivity extends AppCompatActivity {
         }, tracks);
     }
 
-    /*
-        Store seekbar values
-        specifications(0) = acousticness
-        specifications(1) = danceability
-        specifications(2) = energy
-        specifications(3) = instrumentalness
-        specifications(4) = loudness
-        specifications(5) = valence
-        specifications(6) = length of playlist**
-     */
     private void getSeekbarValues () {
         specifications.add( sorter.getFeaturePreferences(Sorting.Feat.ACCOUSTICNESS) );
         specifications.add( sorter.getFeaturePreferences(Sorting.Feat.DANCEABILITY) );
@@ -331,10 +336,7 @@ public class GenPlaylistActivity extends AppCompatActivity {
         specifications.add( sorter.getFeaturePreferences(Sorting.Feat.LENGTH) );
     }
 
-    private double convert100To1 (int value) {
-        return value/100;
-    }
-
+    // get users top artists using song service method getTopArtists
     private void getArtists() {
         songService.getTopArtists(() -> {
             artists = songService.getArtists();

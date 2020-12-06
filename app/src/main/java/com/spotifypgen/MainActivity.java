@@ -1,58 +1,55 @@
 package com.spotifypgen;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/*
+    Second activity automatically launched by the app
+    Activity UI displays options to generate a playlist, display user playlist and create an empty
+    playlist
+ */
+
 public class MainActivity extends AppCompatActivity {
 
-    private TextView userView;
-    private Button genPlaylistBtn;
-    private Button songSearchBtn;
-    private Button createEmptyPlaylistBtn;
-    private Button logoutBtn;
-    private Button dispPlaylistsBtn;
-    private BottomNavigationView bottomNavigationView;
-
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainscreen);
 
-        bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomNev);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNev);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-        //getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
 
-        userView = (TextView) findViewById(R.id.user);
+        TextView userView = (TextView) findViewById(R.id.user);
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         userView.setText("Hi, "+ sharedPreferences.getString("username", "No User"));
 
-        genPlaylistBtn = (Button) findViewById(R.id.genPlaylist_button);
-        //songSearchBtn = (Button) findViewById(R.id.songSearch_button);
-        createEmptyPlaylistBtn = (Button) findViewById(R.id.CreateEmptyPlaylist_button);
-        dispPlaylistsBtn = (Button) findViewById(R.id.dispPlaylists_button);
-        //logoutBtn = (Button) findViewById(R.id.logout_button);
+        // create listener methods for all buttons in activity_mainscreen xml layout
+        Button genPlaylistBtn = (Button) findViewById(R.id.genPlaylist_button);
+
+        Button createEmptyPlaylistBtn = (Button) findViewById(R.id.CreateEmptyPlaylist_button);
+
+        Button dispPlaylistsBtn = (Button) findViewById(R.id.dispPlaylists_button);
+        dispPlaylistsBtn.setOnClickListener(dispPlaylistsBtnListener);
 
         genPlaylistBtn.setOnClickListener(genPlaylistBtnListener);
-        //songSearchBtn.setOnClickListener(songSearchBtnListener);
+
         createEmptyPlaylistBtn.setOnClickListener(createEmptyPlaylistBtnListener);
-        dispPlaylistsBtn.setOnClickListener(dispPlaylistsBtnListener);
-        //logoutBtn.setOnClickListener(logoutBtnListener);
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
+    @SuppressLint("NonConstantResourceId")
+    private final BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
 
         switch (item.getItemId())
         {
@@ -72,23 +69,27 @@ public class MainActivity extends AppCompatActivity {
         return true;
     };
 
-    private View.OnClickListener genPlaylistBtnListener = v -> {
+    /*
+        listener method starts intent with GenPlaylistActivity class
+     */
+    private final View.OnClickListener genPlaylistBtnListener = v -> {
         Intent newintent = new Intent(MainActivity.this, GenPlaylistActivity.class);
         startActivity(newintent);
     };
-    private View.OnClickListener songSearchBtnListener = v -> {
-        Intent newintent = new Intent(MainActivity.this, SongSearchActivity.class);
-        startActivity(newintent);
-    };
-    private View.OnClickListener createEmptyPlaylistBtnListener = v -> {
+
+    /*
+        listener method starts intent with EmptyPlaylistActivity class
+     */
+    private final View.OnClickListener createEmptyPlaylistBtnListener = v -> {
         Intent newintent = new Intent(MainActivity.this, EmptyPlaylistActivity.class);
         startActivity(newintent);
     };
-    private View.OnClickListener dispPlaylistsBtnListener = v -> {
+
+    /*
+        listener method starts intent with DispPlaylistsActivity class
+     */
+    private final View.OnClickListener dispPlaylistsBtnListener = v -> {
         Intent newintent = new Intent(MainActivity.this, DispPlaylistsActivity.class);
         startActivity(newintent);
-    };
-    private View.OnClickListener logoutBtnListener = v -> {
-
     };
 }

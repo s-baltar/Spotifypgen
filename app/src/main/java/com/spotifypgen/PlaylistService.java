@@ -17,14 +17,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 
 public class PlaylistService {
-    private SharedPreferences sharedPreferences;
-    private RequestQueue queue;
+    private final SharedPreferences sharedPreferences;
+    private final RequestQueue queue;
     private User user;
-    private ArrayList<Playlist> playlists = new ArrayList<>();
+    private final ArrayList<Playlist> playlists = new ArrayList<>();
     private Playlist playlist = new Playlist();
 
     public PlaylistService(Context context) {
@@ -52,8 +51,14 @@ public class PlaylistService {
     }
 
 
-    // create empty playlist
-    public Playlist createPlaylist(final VolleyCallBack callBack, String user_id, String playlistName) {
+    /*
+        creates a playlist
+        inputs:
+        parameter 1 -> VolleyCallBack
+        parameter 2 -> the user's id
+        parameter 3 -> the name of the playlist being created
+     */
+    public void createPlaylist(final VolleyCallBack callBack, String user_id, String playlistName) {
         String endpoint = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
         JSONObject payload = preparePostPayload(playlistName);
         JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(
@@ -74,11 +79,12 @@ public class PlaylistService {
             }
         };
         queue.add(jsonObjectRequest);
-        return playlist;
     }
 
-    // requests to delete a user user's playlist using the DELETE method
-    // the Spotify API uses the unfollow feature to achieve this
+    /*
+        - requests to delete a user user's playlist using the DELETE method
+        - the Spotify API uses the unfollow feature to achieve this
+     */
     public void deletePlaylist(String playlistURI) {
         String endpoint = "https://api.spotify.com/v1/playlists/"+playlistURI+"/followers";
 
@@ -115,8 +121,8 @@ public class PlaylistService {
     }
 
 
-    // returns array of user's saved playlists
-    public ArrayList<Playlist> getUserPlaylists(final VolleyCallBack callBack) {
+    // returns ArrayList of user's saved playlists
+    public void getUserPlaylists(final VolleyCallBack callBack) {
         String endpoint = "https://api.spotify.com/v1/me/playlists";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, endpoint, null, response -> {
@@ -145,7 +151,6 @@ public class PlaylistService {
             }
         };
         queue.add(jsonObjectRequest);
-        return playlists;
     }
 
 
@@ -172,5 +177,4 @@ public class PlaylistService {
             }
         };
     }
-
 }
