@@ -282,7 +282,7 @@ public class SongService {
                             "&target_danceability=" + specs.get(1) +
                             "&min_energy=" + specs.get(2) +
                             "&max_instrumentalness=" + specs.get(3) +
-//                            "&target_loudness=" + specs.get(4) + // TODO: scale LOUDNESS
+                            "&target_loudness=" + specs.get(4) +
                             "&target_valence=" + specs.get(5) +
                             "&limit=" + 100;
 

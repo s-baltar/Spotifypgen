@@ -40,8 +40,7 @@ public class Sorting {
         if (audioFeature == Feat.LENGTH)
             featurePref.put( audioFeature, value );
         else if (audioFeature == Feat.LOUDNESS) {
-            double db = value; // TODO: Scale from [0,100] to [-60,0] dB
-            featurePref.put(audioFeature, db);
+            featurePref.put(audioFeature, (value * 0.6) - 60);
         } else // Scale vale down by 100.
             featurePref.put( audioFeature, value / 100 );
     }

@@ -20,7 +20,7 @@ public class SortingTest extends TestCase {
             Features f = new Features();
             f.setDanceability(0.5);
             f.setEnergy(0.5);
-//        f.setLoudness(-11); // TODO: fix loudness
+            f.setLoudness(-10);
             f.setAcousticness(0.5);
             f.setInstrumentalness(0.5);
             f.setValence(0.5);
