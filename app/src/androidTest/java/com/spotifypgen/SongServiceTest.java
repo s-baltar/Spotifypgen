@@ -14,6 +14,11 @@ public class SongServiceTest {
 
     @Test
     public void getSavedTracks() {
+        SongService songService = new SongService(getApplicationContext());
+        songService.getSavedTracks(() -> {
+            Song songResult = songService.getSongs().get(0);
+            assertNotNull("Error in getting saved song",songResult.getId());
+        },0,1);
     }
 
 
