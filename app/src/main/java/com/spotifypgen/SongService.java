@@ -20,15 +20,14 @@ import java.util.Map;
 
 
 public class SongService {
-    private ArrayList<Song> songs = new ArrayList<>();
-    private SharedPreferences sharedPreferences;
-    private RequestQueue queue;
+    private final ArrayList<Song> songs = new ArrayList<>();
+    private final SharedPreferences sharedPreferences;
+    private final RequestQueue queue;
     private Song song;
-    private ArrayList<String> uris;
 
-    private ArrayList<Artist> artists = new ArrayList<>();
+    private final ArrayList<Artist> artists = new ArrayList<>();
     private Artist artist;
-    private ArrayList<Song> tracks = new ArrayList<>();
+    private final ArrayList<Song> tracks = new ArrayList<>();
     private Song track;
 
     private ArrayList<Features> features = new ArrayList<>();
