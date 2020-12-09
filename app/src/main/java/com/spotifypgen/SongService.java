@@ -42,41 +42,6 @@ public class SongService {
     public ArrayList<Song> getSongs() { return songs; }
 
 
-    public ArrayList<Features> getTrackFeatures() { return features; }
-
-    // returns array of user's recently played songs
-    public void getRecentlyPlayedTracks(final VolleyCallBack callBack) {
-        String endpoint = "https://api.spotify.com/v1/me/player/recently-played";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, endpoint, null, response -> {
-                    Gson gson = new Gson();
-                    JSONArray jsonArray = response.optJSONArray("items");
-                    for (int n = 0; n < jsonArray.length(); n++) {
-                        try {
-                            JSONObject object = jsonArray.getJSONObject(n);
-                            object = object.optJSONObject("track");
-                            Song song = gson.fromJson(object.toString(), Song.class);
-                            songs.add(song);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    callBack.onSuccess();
-                }, error -> {
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", "");
-                String auth = "Bearer " + token;
-                headers.put("Authorization", auth);
-                return headers;
-            }
-        };
-        queue.add(jsonObjectRequest);
-    }
-
     // returns array of user's saved (liked) songs
     public void getSavedTracks(final VolleyCallBack callBack, int offset, int limit) {
         String endpoint = "https://api.spotify.com/v1/me/tracks?offset=" + String.valueOf(offset) +
@@ -112,14 +77,6 @@ public class SongService {
 
     }
 
-    //  Info: Only gets 1000 most recently saved songs.
-    public void getAllSavedTracks(final VolleyCallBack callBack) {
-        for (int i=0; i<1000; i+=20) {
-            getSavedTracks( ()-> {
-            }, i, 20);
-        }
-        callBack.onSuccess();
-    }
 
     // add song to saved songs
     public void addSongToLibrary(Song song) {
@@ -228,8 +185,6 @@ public class SongService {
         };
         queue.add(jsonObjectRequest);
     }
-
-    public ArrayList<String> getURIS() { return uris; }
 
     // get user's top 5 tracks
     public void getTopTracks(final VolleyCallBack callBack) {

@@ -11,22 +11,11 @@ import static org.junit.Assert.*;
 public class SongServiceTest {
     ArrayList<Artist> artists;
 
-    @Test
-    public void getSongs() {
-    }
-
-    @Test
-    public void getRecentlyPlayedTracks() {
-    }
 
     @Test
     public void getSavedTracks() {
     }
 
-    @Test
-    public void getAllSavedTracks() {
-
-    }
 
     @Test
     public void addSongToLibrary() {
@@ -98,11 +87,6 @@ public class SongServiceTest {
             assertNotNull("Error in getting tempo",             feats.get(0).getTempo() );
             assertNotNull("Error in getting duration",          feats.get(0).getDuration_ms() );
         }, tracks);
-
-    }
-
-    @Test
-    public void getArtists() {
 
     }
 

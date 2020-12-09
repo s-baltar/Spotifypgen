@@ -288,29 +288,12 @@ public class GenPlaylistActivity extends AppCompatActivity {
         }
     }
 
-
-    // Info: Get user's recently played tracks.
-    private void getTracks() {
-        songService.getRecentlyPlayedTracks(() -> {
-            tracks = songService.getSongs();
-        });
-    }
-
-
     // Info: Get user's 20 most recent saved tracks.
     private void getSavedTracks() {
         songService.getSavedTracks(() -> {
             tracks = songService.getSongs();
         }, 0, 20);
     }
-
-
-    private void getAllSavedTracks()  {
-        songService.getAllSavedTracks(() -> {
-            tracks = songService.getSongs();
-        });
-    }
-
 
     // Info: Get several tracks audio features.
     private void getAudioFeatures() {
